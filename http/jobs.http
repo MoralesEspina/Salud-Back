@@ -1,0 +1,46 @@
+@host = http://localhost:4000/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+GET {{host}}/jobs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/jobs/d186b794-3f6f-4f71-af40-ea622b776bc7
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+
+###
+POST {{host}}/jobs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "job":"Este es un trabajo"
+}
+
+###
+DELETE {{host}}/jobs/d186b794-3f6f-4f71-af40-ea622b776bc7
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+PUT {{host}}/jobs/d186b794-3f6f-4f71-af40-ea622b776bc7
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "job":"Este es un trabajo actualizado"
+}
+

@@ -1,0 +1,15 @@
+@host = http://localhost:4000/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+GET {{host}}/reports/authorizations?startdate=2021/02/05&enddate=2021/02/27
+Authorization: Bearer {{login.response.body.token}}

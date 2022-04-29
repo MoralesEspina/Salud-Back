@@ -1,0 +1,10 @@
+reportes-salud.exe
+.vscode
+tmp
+__debug_bin
+
+database/sissaludv2.mwb
+database/sissaludv2.mwb.bak
+database/sissaludv3.mwb
+database/sissaludv3.mwb.bak
+database/sissaludv4.mwb

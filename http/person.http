@@ -1,0 +1,83 @@
+@host = http://localhost:4000/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+POST {{host}}/persons
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+  "fullname": "MYNOR AROLDO CASTRILLO MALDONADO",
+  "cui": "9901359946",
+  "partida": null,
+  "sueldo": 3833.83,
+  "admission_date": null,
+  "job": {
+    "uuid_job": "02a3731d-a776-4d0a-959b-97a455fa4004"
+  },
+  "work_dependency": {
+    "uuid_work": "07b897b7-a6d1-415b-abd9-cba9efc7305a"
+  },
+  "especiality": {
+    "uuid_especiality": "13930aa8-e2d3-4114-81ad-547536a95dd9"
+  },
+  "reubication": {
+    "uuid_reubication": null
+  },
+  "renglon":"",
+  "is_public_server":false 
+}
+
+###
+GET {{host}}/persons?page=4&limit=10&filter=ad
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/persons/d3602d9f-a308-4fb6-b5a1-ce46b11b08e6rr
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+PUT {{host}}/persons/df527f7e-e355-4e82-b4a8-58e04a47bcfa
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "fullname": "ABNER LUIS ALBERTO ALFARO CRUZ",
+    "cui": "9901359946",
+    "partida": null,
+    "sueldo": 3833.83,
+    "admission_date": null,
+    "job": {
+      "uuid_job": "f7ea66cc-516e-44e3-8bc1-f76e51ec05cd"
+    },
+    "work_dependency": {
+      "uuid_work": "8713a6f9-45c9-42ae-84cc-e50fa71e7ff1"
+    },
+    "especiality": {
+      "uuid_especiality": "5598e017-7b89-407f-bdf3-47b7cca6fbe0ssdfasdf"
+    },
+    "reubication": {
+      "uuid_job": null,
+      "job": null
+    }
+}
+
+
+###
+GET {{host}}/validation/certify/c752a046-fbbd-44fb-aac8-ae5f8c588323
+
+###
+GET {{host}}/persons/information/full?page=1&limit=1000&filter=ad
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}

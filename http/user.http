@@ -1,0 +1,40 @@
+# @host = http://localhost:4000/das/v1
+@host =  https://das-jalapa-system.herokuapp.com/das/v1
+
+###
+POST {{host}}/users/register
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZTdhMjg0YTktNTVmOC00YzQ2LTg0NzYtM2MxODQ3NDFmYzgwIiwidXNlcm5hbWUiOiJjcmlzdGlhbkpMIiwicm9sIjoiYWRtaW4ifSwiZXhwIjoxNjIzMDgxMzgxLCJpc3MiOiJtaW5pc3RlcmlvIGRlIHNhbHVkIn0.G0xcYuBTEKLV19smbz3A3f8TKGHaFO9bU5NZAs24mn9gcgWchVhTfEUYgkvBk5FFhWlPIZ1YNJHfSMcr85Rbgrk01sbQ-k1sQZ2_uwlEiCo-ZpqkDVUPCTfrz58FXjw4gwFv_-L5gnd36gwk6Qg3ZOMruNgEh1GFYjCmDwPIDNE
+Content-Type: application/json
+
+{
+    "username":"mynor",
+    "password":"mynor",
+    "id_rol": 2
+}
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"mynor",
+    "password":"mynor"
+}
+
+###
+GET {{host}}/users
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+
+###
+POST {{host}}/users/changepassword
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "actual_password":"123456",
+    "new_password":"abcde"
+}
+

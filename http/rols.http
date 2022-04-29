@@ -1,0 +1,17 @@
+@host = http://localhost:4000/das/v1
+# @host =  https://das-jalapa.herokuapp.com/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+GET {{host}}/users/rols
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}

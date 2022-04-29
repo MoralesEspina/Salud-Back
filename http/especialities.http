@@ -1,0 +1,46 @@
+@host = http://localhost:4000/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+GET {{host}}/especialities
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/especialities/b7049fca-0d09-4904-8c82-5104a93c26e9
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+
+###
+POST {{host}}/especialities
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "name":"ACTIVIDADES SECRETARIALES  ."
+}
+
+###
+DELETE {{host}}/especialities/b7049fca-0d09-4904-8c82-5104a93c26e9
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+PUT {{host}}/especialities/b7049fca-0d09-4904-8c82-5104a93c26e9
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "name":"ACTIVIDADES SECRETARIALES"
+}
+

@@ -1,0 +1,45 @@
+@host = http://localhost:4000/das/v1
+
+###
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username":"cristianJL",
+    "password":"Guat33mala225"
+}
+
+###
+GET {{host}}/works
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/works/b2a287ca-0bc0-4ab9-9783-c8e08d59a743
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+POST {{host}}/works
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "name":"Esta es otra dependencia de trabajo"
+}
+
+
+###
+DELETE {{host}}/works/b2a287ca-0bc0-4ab9-9783-c8e08d59a743
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+PUT {{host}}/works/b2a287ca-0bc0-4ab9-9783-c8e08d59a743
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "name":"Este es un trabajo actualizado otra vez"
+}

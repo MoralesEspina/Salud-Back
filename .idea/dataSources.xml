@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="MySQL - sissaludv3@localhost" uuid="43ddfd15-ad0a-457e-81a4-d26e3b5fa607">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/sissaludv3</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <driver-properties>
+        <property name="serverTimezone" value="UTC" />
+      </driver-properties>
+      <time-zone>America/Guatemala</time-zone>
+    </data-source>
+  </component>
+</project>

@@ -1,0 +1,15 @@
+{
+    "PORT": "4000",
+    "HOSTDB": "143.198.176.25",
+    "PORTDB": 3306,
+    "USERDB": "administrator",
+    "PASSWORDDB": "sistemaDa$$Jalapa5092021sep",
+    "DATABASE": "dassystem",
+    "DEVHOSTDB": "localhost",
+    "DEVPORTDB": 3306,
+    "DEVUSERDB": "root",
+    "DEVPASSWORDDB": "system",
+    "DEVDATABASE": "sissaludv5",
+    "PRODUCTION": true,
+    "USESSL": false
+}
