@@ -6,11 +6,11 @@
     "PASSWORDDB": "sistemaDa$$Jalapa5092021sep",
     "DATABASE": "dassystem",
     
-    "DEVHOSTDB": "localhost",
+    "DEVHOSTDB": "j8oay8teq9xaycnm.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "DEVPORTDB": 3306,
-    "DEVUSERDB": "root",
-    "DEVPASSWORDDB": "system",
-    "DEVDATABASE": "sissaludv5",
+    "DEVUSERDB": "zkwgkh7sv0wfa6mo",
+    "DEVPASSWORDDB": "s07vymop90jj7xqs",
+    "DEVDATABASE": "u1ntiesb2kvna45k",
     "PRODUCTION": false,
     "USESSL": false
 }
