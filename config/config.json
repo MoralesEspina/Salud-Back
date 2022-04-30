@@ -5,11 +5,12 @@
     "USERDB": "administrator",
     "PASSWORDDB": "sistemaDa$$Jalapa5092021sep",
     "DATABASE": "dassystem",
+    
     "DEVHOSTDB": "localhost",
     "DEVPORTDB": 3306,
     "DEVUSERDB": "root",
     "DEVPASSWORDDB": "system",
     "DEVDATABASE": "sissaludv5",
-    "PRODUCTION": true,
+    "PRODUCTION": false,
     "USESSL": false
 }
