@@ -34,6 +34,8 @@ type PersonService interface {
 	CreateSubstitute(ctx context.Context, person models.Person) (models.Person, error)
 	GetOneSubstitute(ctx context.Context, uuidPerson string) (models.Person, error)
 	GetSubstitutes(ctx context.Context) ([]models.Person, error)
+
+	GetNamePerson(ctx context.Context) ([]models.Person, error)
 }
 
 func (*personService) Create(ctx context.Context, person models.Person) (models.Person, error) {
