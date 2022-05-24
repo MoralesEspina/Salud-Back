@@ -292,7 +292,7 @@ func (*personController) GetNamePerson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := IPersonService.GetSubstitutes(r.Context())
+	data, err := IPersonService.GetNamePerson(r.Context())
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
