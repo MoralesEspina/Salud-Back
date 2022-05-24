@@ -33,6 +33,7 @@ type PersonController interface {
 	CreateSubstitute(w http.ResponseWriter, r *http.Request)
 	GetOneSubstitute(w http.ResponseWriter, r *http.Request)
 	GetSubstitutes(w http.ResponseWriter, r *http.Request)
+	GetNamePerson(w http.ResponseWriter, r *http.Request)
 }
 
 func (*personController) Create(w http.ResponseWriter, r *http.Request) {

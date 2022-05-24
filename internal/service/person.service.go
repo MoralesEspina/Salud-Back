@@ -69,6 +69,10 @@ func (*personService) GetSubstitutes(ctx context.Context) ([]models.Person, erro
 	return PersonStorage.GetSubstitutes(ctx)
 }
 
+func (*personService) GetNamePerson(ctx context.Context) ([]models.Person, error) {
+	return PersonStorage.GetNamePerson(ctx)
+}
+
 func ValidateExistePerson(ctx context.Context, uuid string) (sqlnulls.NullString, error) {
 	return storage.ValidateExistePerson(ctx, uuid)
 }

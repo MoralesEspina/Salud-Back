@@ -433,3 +433,24 @@ func (p *repoPerson) PaginationQuery(page, limit int) *repoPerson {
 
 	return p
 }
+
+func (*repoPerson) GetNamePerson(ctx context.Context) ([]models.Person, error) {
+	person := models.Person{}
+	persons := []models.Person{}
+	query := "SELECT uuid, fullname FROM person WHERE isPublicServer is false;"
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return persons, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&person.UUID, &person.Fullname)
+		if err != nil {
+			return persons, err
+		}
+
+		persons = append(persons, person)
+	}
+	return persons, nil
+}
