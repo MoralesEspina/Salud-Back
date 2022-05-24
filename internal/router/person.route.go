@@ -28,6 +28,8 @@ func SetPersonRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/substitutes", personController.GetSubstitutes).Methods("GET")
 	router.HandleFunc("/substitutes/{uuid}", personController.GetOneSubstitute).Methods("GET")
 
+	router.HandleFunc("/nameperson", personController.GetNamePerson).Methods("GET")
+
 	person.Handle("/information/full", middleware.AuthForAmdminTypeHTTP(personController.GetManyWithFullInformation)).Methods("GET")
 	return router
 }
