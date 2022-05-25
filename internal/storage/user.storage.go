@@ -44,8 +44,8 @@ func (*repoUser) Create(ctx context.Context, user *models.User) (string, error) 
 		return "", err
 	}
 
-	query := "INSERT INTO user (uuid, username, password, rol_id) values (?, ?, ?, ?);"
-	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol)
+	query := "INSERT INTO user (uuid, username, password, rol_id, uuidPerson) values (?, ?, ?, ?, ?);"
+	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol, user.Person)
 
 	if err != nil {
 		log.Println(err)

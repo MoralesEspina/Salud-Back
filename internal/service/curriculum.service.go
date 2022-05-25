@@ -1,0 +1,35 @@
+package service
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/DasJalapa/reportes-salud/internal/models"
+	"github.com/DasJalapa/reportes-salud/internal/storage"
+
+	//"github.com/Mynor2397/sqlnulls"
+	"github.com/google/uuid"
+)
+
+type curriculumService struct {
+}
+
+var CurriculumStorage storage.CurriculumStorage
+
+// NewCurriculumService retorna un nuevo servicio para los usuarios
+func NewCurriculumService(curriculumStorage storage.CurriculumStorage) CurriculumService {
+	CurriculumStorage = curriculumStorage
+	return &curriculumService{}
+}
+
+// CurriculumService implementa el conjunto de metodos de servicio para usuario
+type CurriculumService interface {
+	Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error)
+}
+
+func (*curriculumService) Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error) {
+	uuidString := fmt.Sprintf(`{"uuid": "%s"}`, uuid.New().String())
+	json.Unmarshal([]byte(uuidString), &curriculum)
+	return CurriculumStorage.Create(ctx, curriculum)
+}
