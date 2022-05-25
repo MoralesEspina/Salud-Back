@@ -26,10 +26,15 @@ func NewCurriculumService(curriculumStorage storage.CurriculumStorage) Curriculu
 // CurriculumService implementa el conjunto de metodos de servicio para usuario
 type CurriculumService interface {
 	Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error)
+	GetOne(ctx context.Context, uuid string) (models.Curriculum, error)
 }
 
 func (*curriculumService) Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error) {
 	uuidString := fmt.Sprintf(`{"uuid": "%s"}`, uuid.New().String())
 	json.Unmarshal([]byte(uuidString), &curriculum)
 	return CurriculumStorage.Create(ctx, curriculum)
+}
+
+func (*curriculumService) GetOne(ctx context.Context, uuid string) (models.Curriculum, error) {
+	return CurriculumStorage.GetOne(ctx, uuid)
 }

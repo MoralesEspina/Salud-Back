@@ -23,6 +23,7 @@ func InitRoutes() *mux.Router {
 	api = SetWorkDependencyRoutes(api)
 	api = SetEspecialityRoutes(api)
 	api = SetRequestVacationRoutes(api)
+	api = SetCurriculumRoutes(api)
 
 	router.Use(middleware.WriteJSONHeader)
 
