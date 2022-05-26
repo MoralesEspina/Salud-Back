@@ -59,11 +59,11 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 	var response models.User
 	var passwordClient string
 
-	query := "SELECT u.uuid, u.username, u.password, r.role FROM user u "
+	query := "SELECT u.uuid, u.username, u.password, r.role, u.uuidPerson FROM user u "
 	query += "INNER JOIN rol r ON u.rol_id = r.id "
 	query += "WHERE binary username = ?;"
 
-	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol)
+	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol, &user.Person)
 
 	if row == sql.ErrNoRows {
 		return response, lib.ErrUserNotFound
@@ -85,6 +85,7 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 
 	token := helper.GenerateJWT(user)
 	response.Token = token
+	response.Person = user.Person
 
 	return response, nil
 }

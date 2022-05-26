@@ -33,7 +33,7 @@ Authorization: Bearer {{login.response.body.token}}
     }
 
 ###
-GET {{host}}/curriculums/5
+GET {{host}}/curriculums/001490e6-e5b7-48bb-8387-7f63c19cf604
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
