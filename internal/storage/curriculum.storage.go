@@ -55,7 +55,7 @@ func (*repoCurriculum) GetOne(ctx context.Context, uuid string) (models.Curricul
 	curriculum := models.Curriculum{}
 
 	query := `
-	SELECT * FROM curriculum;`
+	SELECT * FROM curriculum where uuidPerson = ?;`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&curriculum.UUID,
