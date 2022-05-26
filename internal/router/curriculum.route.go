@@ -15,10 +15,10 @@ var (
 )
 
 // SetCurriculumRoutes registra la rutas a usar para los controladires de usuario
-func SetCurriculumRoutes(router *mux.Router) *mux.Router {
+func SetCurriculumRoutes(router *mux.Router) {
+	router.Use(middleware.Loger)
 	curriculum := router.PathPrefix("/curriculums").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
 	curriculum.Handle("", middleware.AuthForAmdminTypeHTTP(curriculumController.Create)).Methods("POST")
 	curriculum.HandleFunc("/{uuid}", curriculumController.GetOne).Methods("GET")
-	return router
 }

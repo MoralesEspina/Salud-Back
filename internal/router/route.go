@@ -15,15 +15,16 @@ func InitRoutes() *mux.Router {
 	router.PathPrefix("/images").Handler(http.StripPrefix("/images", http.FileServer(http.Dir("public/"))))
 	api := router.PathPrefix("/das/v1").Subrouter()
 	api.Use(middleware.Auth)
+	api.Use(middleware.Loger)
 
 	api = SetUserRoutes(api)
+	SetCurriculumRoutes(api)
 	api = SetPersonRoutes(api)
 	api = SetAuthorizationRoutes(api)
 	api = SetJobRoutes(api)
 	api = SetWorkDependencyRoutes(api)
 	api = SetEspecialityRoutes(api)
 	api = SetRequestVacationRoutes(api)
-	api = SetCurriculumRoutes(api)
 
 	router.Use(middleware.WriteJSONHeader)
 

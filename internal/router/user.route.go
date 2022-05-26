@@ -21,6 +21,7 @@ func SetUserRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/user/verify", userController.UserInformationByToken).Methods("GET")
 
 	user := router.PathPrefix("/users").Subrouter()
+	user.Handle("/{uuid}", middleware.AuthForAmdminTypeHTTP(userController.Update)).Methods("PUT")
 	user.Use(middleware.AuthForAmdmin)
 	user.HandleFunc("/register", userController.Create).Methods("POST")
 	user.HandleFunc("", userController.ManyUsers).Methods("GET")

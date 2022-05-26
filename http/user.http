@@ -1,15 +1,16 @@
-# @host = http://localhost:4000/das/v1
-@host =  https://das-jalapa-system.herokuapp.com/das/v1
+ @host = http://localhost:4000/das/v1
+#@host =  https://das-jalapa-system.herokuapp.com/das/v1
 
 ###
 POST {{host}}/users/register
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZTdhMjg0YTktNTVmOC00YzQ2LTg0NzYtM2MxODQ3NDFmYzgwIiwidXNlcm5hbWUiOiJjcmlzdGlhbkpMIiwicm9sIjoiYWRtaW4ifSwiZXhwIjoxNjIzMDgxMzgxLCJpc3MiOiJtaW5pc3RlcmlvIGRlIHNhbHVkIn0.G0xcYuBTEKLV19smbz3A3f8TKGHaFO9bU5NZAs24mn9gcgWchVhTfEUYgkvBk5FFhWlPIZ1YNJHfSMcr85Rbgrk01sbQ-k1sQZ2_uwlEiCo-ZpqkDVUPCTfrz58FXjw4gwFv_-L5gnd36gwk6Qg3ZOMruNgEh1GFYjCmDwPIDNE
+Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
     "username":"mynor",
     "password":"mynor",
-    "id_rol": 2
+    "id_rol": 2,
+    "uuidPerson": "18214f84-f835-4cd0-a2ef-717c9429de08"
 }
 
 ###
@@ -18,8 +19,19 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"mynor",
-    "password":"mynor"
+    "username":"Prueba",
+    "password":"admin"
+}
+
+###
+
+PUT {{host}}/users/a00cfe0c-1cc1-4aff-9513-3034ee63e54a
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "id_rol" : 1,
+    "username": "PruebaTobar"
 }
 
 ###

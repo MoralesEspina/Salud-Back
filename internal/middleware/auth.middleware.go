@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"strings"
 
@@ -16,6 +17,13 @@ var (
 	//Claims contendrá el rol del usuario en el contexto
 	Claims claim = "claims"
 )
+
+func Loger(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL)
+		next.ServeHTTP(w, r)
+	})
+}
 
 // Auth middleware de autenticación
 func Auth(next http.Handler) http.Handler {

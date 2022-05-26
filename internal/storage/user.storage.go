@@ -26,7 +26,7 @@ type repoUser struct{}
 // UserStorage implementa todos lo metodos de usuario
 type UserStorage interface {
 	Create(ctx context.Context, user *models.User) (string, error)
-	Update(ctx context.Context, id, rol string) error
+	Update(ctx context.Context, uuid string, user *models.User) (string, error)
 	Login(ctx context.Context, user *models.User) (models.User, error)
 	GetManyUsers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
@@ -89,17 +89,19 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 	return response, nil
 }
 
-func (*repoUser) Update(ctx context.Context, id, rol string) error {
-	query := "UPDATE VPO_User SET uuidRol=? WHERE idUser = ?;"
+func (*repoUser) Update(ctx context.Context, uuid string, user *models.User) (string, error) {
+	query := "UPDATE user SET rol_id=?, username=? WHERE uuid = ?;"
 
-	_, err := db.QueryContext(ctx, query, rol, id)
+	_, err := db.QueryContext(ctx, query, user.IDRol, user.Username, uuid)
 
 	if err != nil {
-		return err
+		println(user.IDRol, user.Username)
+		return "", err
 	}
-
-	return nil
+	println(user.IDRol, user.Username)
+	return user.ID, nil
 }
+
 func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
