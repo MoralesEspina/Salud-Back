@@ -120,7 +120,7 @@ func (*repoUser) GetOneUser(ctx context.Context, uuid string) (models.User, erro
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&user.Username,
 		&user.Password,
-		&user.Rols.Role,
+		&user.RolsUser.Role,
 		&user.IDRol,
 	)
 

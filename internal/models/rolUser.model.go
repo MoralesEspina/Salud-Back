@@ -1,5 +1,5 @@
 package models
 
-type Rols struct {
+type RolsUser struct {
 	Role string `json:"role,omitempty"`
 }

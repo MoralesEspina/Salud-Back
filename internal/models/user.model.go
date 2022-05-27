@@ -9,5 +9,5 @@ type User struct {
 	IDRol    int64  `json:"id_rol,omitempty"`
 	Token    string `json:"token,omitempty"`
 	Person   string `json:"uuidPerson,omitempty"`
-	Rols
+	RolsUser
 }
