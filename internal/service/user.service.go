@@ -23,6 +23,7 @@ func NewUserService(userstorage storage.UserStorage) UserService {
 type UserService interface {
 	Create(ctx context.Context, user *models.User) (string, error)
 	Login(ctx context.Context, user *models.User) (models.User, error)
+	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	Update(ctx context.Context, uuid string, user *models.User) (string, error)
 	ManyUsers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
@@ -45,6 +46,10 @@ func (*userService) Update(ctx context.Context, uuid string, user *models.User) 
 // UserLogin es el servicio de conexion al storage de login de usuario
 func (*userService) Login(ctx context.Context, user *models.User) (models.User, error) {
 	return Userstorage.Login(ctx, user)
+}
+
+func (*userService) GetOneUser(ctx context.Context, uuid string) (models.User, error) {
+	return Userstorage.GetOneUser(ctx, uuid)
 }
 
 func (*userService) ManyUsers(ctx context.Context) ([]models.User, error) {

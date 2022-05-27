@@ -28,6 +28,7 @@ type UserStorage interface {
 	Create(ctx context.Context, user *models.User) (string, error)
 	Update(ctx context.Context, uuid string, user *models.User) (string, error)
 	Login(ctx context.Context, user *models.User) (models.User, error)
+	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	GetManyUsers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
 
@@ -101,6 +102,37 @@ func (*repoUser) Update(ctx context.Context, uuid string, user *models.User) (st
 	}
 	println(user.IDRol, user.Username)
 	return user.ID, nil
+}
+
+func (*repoUser) GetOneUser(ctx context.Context, uuid string) (models.User, error) {
+	user := models.User{}
+
+	query := `
+	SELECT 
+	u.username, 
+	u.password, 
+	r.role as rol,
+    u.rol_id as id
+    FROM user u
+        INNER JOIN rol r ON u.rol_id = r.id
+    WHERE uuid = ?;`
+
+	err := db.QueryRowContext(ctx, query, uuid).Scan(
+		&user.Username,
+		&user.Password,
+		&user.Rols.Role,
+		&user.IDRol,
+	)
+
+	if err == sql.ErrNoRows {
+		return user, lib.ErrNotFound
+	}
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
 
 func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {

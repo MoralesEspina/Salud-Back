@@ -26,6 +26,7 @@ type UserController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
+	GetOneUser(w http.ResponseWriter, r *http.Request)
 	ManyUsers(w http.ResponseWriter, r *http.Request)
 	Rols(w http.ResponseWriter, r *http.Request)
 	ChangePassword(w http.ResponseWriter, r *http.Request)
@@ -201,6 +202,42 @@ func (*userController) UserInformationByToken(w http.ResponseWriter, r *http.Req
 // 		return
 // 	}
 // }
+
+func (*userController) GetOneUser(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	data, err := userService.GetOneUser(r.Context(), vars["uuid"])
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+
+}
 
 func (*userController) ManyUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User

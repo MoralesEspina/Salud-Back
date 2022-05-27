@@ -39,6 +39,10 @@ GET {{host}}/users
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
+###
+GET {{host}}/users/a00cfe0c-1cc1-4aff-9513-3034ee63e54a
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
 
 ###
 POST {{host}}/users/changepassword
