@@ -7,8 +7,8 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"cristianJL",
-    "password":"Guat33mala225"
+    "username":"Prueba",
+    "password":"admin"
 }
 
 ###
