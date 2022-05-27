@@ -28,7 +28,7 @@ type UserController interface {
 	Update(w http.ResponseWriter, r *http.Request)
 	GetOneUser(w http.ResponseWriter, r *http.Request)
 	ManyUsers(w http.ResponseWriter, r *http.Request)
-	Roles(w http.ResponseWriter, r *http.Request)
+	Rols(w http.ResponseWriter, r *http.Request)
 	ChangePassword(w http.ResponseWriter, r *http.Request)
 	UserInformationByToken(w http.ResponseWriter, r *http.Request)
 }
@@ -265,7 +265,7 @@ func (*userController) ManyUsers(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (*userController) Roles(w http.ResponseWriter, r *http.Request) {
+func (*userController) Rols(w http.ResponseWriter, r *http.Request) {
 
 	data, err := userService.Roles(r.Context())
 	if err == lib.ErrNotFound {
