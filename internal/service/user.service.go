@@ -28,6 +28,7 @@ type UserService interface {
 	ManyUsers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
 	ChangePassword(ctx context.Context, uuidUser, actualPassword, newPassword string) error
+	DeleteUser(ctx context.Context, uuid string) (string, error)
 
 	UserInformationByToken(ctx context.Context, uuid string) (models.User, error)
 }
@@ -62,6 +63,10 @@ func (*userService) Roles(ctx context.Context) ([]models.Rol, error) {
 
 func (*userService) ChangePassword(ctx context.Context, uuidUser, actualPassword, newPassword string) error {
 	return Userstorage.ChangePassword(ctx, uuidUser, actualPassword, newPassword)
+}
+
+func (*userService) DeleteUser(ctx context.Context, uuid string) (string, error) {
+	return Userstorage.DeleteUser(ctx, uuid)
 }
 
 func (*userService) UserInformationByToken(ctx context.Context, uuid string) (models.User, error) {

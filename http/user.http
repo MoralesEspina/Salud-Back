@@ -19,7 +19,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"PruebaTobar",
+    "username":"Prueba",
     "password":"admin"
 }
 
@@ -53,4 +53,11 @@ Authorization: Bearer {{login.response.body.token}}
     "actual_password":"123456",
     "new_password":"abcde"
 }
+
+
+###
+
+DELETE {{host}}/users/c298138b-7a64-46dc-a00b-b517314b9727
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
 

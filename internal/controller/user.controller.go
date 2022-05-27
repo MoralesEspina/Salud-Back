@@ -30,6 +30,7 @@ type UserController interface {
 	ManyUsers(w http.ResponseWriter, r *http.Request)
 	Rols(w http.ResponseWriter, r *http.Request)
 	ChangePassword(w http.ResponseWriter, r *http.Request)
+	DeleteUser(w http.ResponseWriter, r *http.Request)
 	UserInformationByToken(w http.ResponseWriter, r *http.Request)
 }
 
@@ -325,6 +326,34 @@ func (*userController) ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*userController) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	uuid := mux.Vars(r)["uuid"]
+	_, err := userService.DeleteUser(r.Context(), uuid)
+	if err != nil {
+		if err == lib.ErrNotFound {
+			respond(w, response{
+				Ok:      false,
+				Data:    emptyArray,
+				Message: lib.ErrNotFound.Error(),
+			}, http.StatusNotFound)
+			return
+		}
+
+		respondError(w, err)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: uuid,
+		}, http.StatusOK)
 		return
 	}
 

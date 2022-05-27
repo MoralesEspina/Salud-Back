@@ -28,6 +28,7 @@ func SetUserRoutes(router *mux.Router) *mux.Router {
 	user.HandleFunc("", userController.ManyUsers).Methods("GET")
 	user.HandleFunc("/{uuid}", userController.GetOneUser).Methods("GET")
 	user.HandleFunc("/changepassword", userController.ChangePassword).Methods("POST")
+	user.HandleFunc("/{uuid}", userController.DeleteUser).Methods("DELETE")
 
 	return router
 }

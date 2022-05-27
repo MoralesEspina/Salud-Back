@@ -31,6 +31,7 @@ type UserStorage interface {
 	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	GetManyUsers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
+	DeleteUser(ctx context.Context, uuid string) (string, error)
 
 	ChangePassword(ctx context.Context, uuidUser, actualPassword, newPassword string) error
 
@@ -239,4 +240,20 @@ func (*repoUser) UserInformationByToken(ctx context.Context, uuid string) (model
 
 	return response, nil
 
+}
+
+func (*repoUser) DeleteUser(ctx context.Context, uuid string) (string, error) {
+	queryUpdate := "DELETE FROM user WHERE uuid = ?;"
+
+	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
+	if err != nil {
+		return "", err
+	}
+
+	resultDelete, _ := rows.RowsAffected()
+	if resultDelete == 0 {
+		return "", lib.ErrNotFound
+	}
+
+	return uuid, nil
 }
