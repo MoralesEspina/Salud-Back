@@ -38,6 +38,95 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
+PUT {{host}}/curriculums/001490e6-e5b7-48bb-8387-7f63c19cf604
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "direction": "Monjas",
+    "country": "Monjas",
+    "homePhone":"41806704",
+    "bornPlace":"Monjas",
+    "nacionality":"Mexicano",
+    "municipality":"Monjeño",
+    "village":"Monjas",
+    "workPhone":"79220034",
+    "age":"19",
+    "civilStatus":"Soltero",
+    "etnia":"Ladino",
+    "passport":"654321",
+    "license":"321"
+    }
+###
 GET {{host}}/requestvacations/alo/hola
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+POST {{host}}/references
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "name": "Donal",
+    "phone": "41806704",
+    "relationship":"Hermano",
+    "bornDate": "2001-06-17",
+    "profession":"Catador",
+    "company":"AnimeFLV",
+    "isFamiliar": true
+    }
+
+
+###
+GET {{host}}/references/001490e6-e5b7-48bb-8387-7f63c19cf604
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+POST {{host}}/personEducation
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "country": "Jalapa",
+    "establishment": "Ni idea",
+    "periodOf":"2001-06-17",
+    "periodTo": "2001-06-17",
+    "certificate":"No se que va aqui",
+    "status":"Aqui peor",
+    "grade": "Toy graduado"
+    }
+
+
+###
+GET {{host}}/personEducation/001490e6-e5b7-48bb-8387-7f63c19cf604
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+POST {{host}}/workExp
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "direction": "Jalapa, Jalapa",
+    "phone": "41806704",
+    "reason":"Hueva",
+    "dateof": "2001-06-17",
+    "dateto":"2001-06-17",
+    "job":"Catador",
+    "bossName": "Henry",
+    "sector": "Compu",
+    "salary": 1250.20,
+    "workexpcol": "Ni idea"
+    }
+
+
+###
+GET {{host}}/workExp/001490e6-e5b7-48bb-8387-7f63c19cf604
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}

@@ -30,7 +30,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "id_rol" : 1,
+    "id_rol" : 3,
     "username": "PruebaTobar"
 }
 

@@ -13,32 +13,30 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type curriculumController struct{}
+type referencesController struct{}
 
-var ICurriculumService service.CurriculumService
+var IReferencesService service.ReferencesService
 
-// NewCurriculumController retorna un nuevo controller de tipo usuario controller
-func NewCurriculumController(curriculumService service.CurriculumService) CurriculumController {
-	ICurriculumService = curriculumService
-	return &curriculumController{}
+// NewReferencesController retorna un nuevo controller de tipo usuario controller
+func NewReferencesController(referencesService service.ReferencesService) ReferencesController {
+	IReferencesService = referencesService
+	return &referencesController{}
 }
 
-// CurriculumController contiene todos los controladores de usuario
-type CurriculumController interface {
+// ReferencesController contiene todos los controladores de usuario
+type ReferencesController interface {
 	Create(w http.ResponseWriter, r *http.Request)
-	GetOne(w http.ResponseWriter, r *http.Request)
-	Update(w http.ResponseWriter, r *http.Request)
+	GetReferences(w http.ResponseWriter, r *http.Request)
 }
 
-func (*curriculumController) Create(w http.ResponseWriter, r *http.Request) {
+func (*referencesController) Create(w http.ResponseWriter, r *http.Request) {
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
 		return
 	}
-
 	defer r.Body.Close()
-	var request models.Curriculum
+	var request models.References
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		respond(w, response{
@@ -48,7 +46,7 @@ func (*curriculumController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := ICurriculumService.Create(r.Context(), request)
+	result, err := IReferencesService.Create(r.Context(), request)
 	if err == nil {
 		respond(w, response{
 			Ok:      true,
@@ -75,7 +73,7 @@ func (*curriculumController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (*curriculumController) GetOne(w http.ResponseWriter, r *http.Request) {
+func (*referencesController) GetReferences(w http.ResponseWriter, r *http.Request) {
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
@@ -84,7 +82,7 @@ func (*curriculumController) GetOne(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	data, err := ICurriculumService.GetOne(r.Context(), vars["uuid"])
+	data, err := IReferencesService.GetReferences(r.Context(), vars["uuid"])
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
@@ -98,38 +96,6 @@ func (*curriculumController) GetOne(w http.ResponseWriter, r *http.Request) {
 		respond(w, response{
 			Ok:   true,
 			Data: data,
-		}, http.StatusOK)
-		return
-	}
-
-	if err != nil {
-		respondError(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-
-}
-
-func (*curriculumController) Update(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	var curriculum models.Curriculum
-
-	if err := json.NewDecoder(r.Body).Decode(&curriculum); err != nil {
-		respond(w, response{
-			Ok:      false,
-			Message: err.Error(),
-		}, http.StatusBadRequest)
-		return
-	}
-
-	idUpdated, err := ICurriculumService.Update(r.Context(), mux.Vars(r)["uuid"], curriculum)
-
-	if err == nil {
-		respond(w, response{
-			Ok:       true,
-			Message:  "Registro actualizado satisfactoriamente",
-			IDInsert: idUpdated,
 		}, http.StatusOK)
 		return
 	}
