@@ -26,6 +26,7 @@ func NewPersonEducationService(personEducationStorage storage.PersonEducationSto
 // PersonEducationService implementa el conjunto de metodos de servicio para usuario
 type PersonEducationService interface {
 	Create(ctx context.Context, references models.PersonEducation) (models.PersonEducation, error)
+	Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error)
 	GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error)
 }
 
@@ -37,4 +38,8 @@ func (*personEducationService) Create(ctx context.Context, personEducation model
 
 func (*personEducationService) GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error) {
 	return PersonEducationStorage.GetEducations(ctx, uuid)
+}
+
+func (*personEducationService) Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error) {
+	return PersonEducationStorage.Update(ctx, uuid, education)
 }

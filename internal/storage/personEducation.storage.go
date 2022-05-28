@@ -16,6 +16,7 @@ type repoPersonEducation struct {
 
 type PersonEducationStorage interface {
 	Create(ctx context.Context, personEducation models.PersonEducation) (models.PersonEducation, error)
+	Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error)
 	GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error)
 }
 
@@ -70,4 +71,37 @@ func (*repoPersonEducation) GetEducations(ctx context.Context, uuid string) ([]m
 		educations = append(educations, education)
 	}
 	return educations, nil
+}
+
+func (*repoPersonEducation) Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error) {
+
+	query := `UPDATE personeducation SET 
+					country = ?, 
+					establishment = ?, 
+					periodof = ?, 
+					periodto = ?, 
+					certificate = ?, 
+					status = ?, 
+					grade = ?`
+
+	query += " WHERE uuid = ?;"
+
+	_, err := db.QueryContext(
+		ctx,
+		query,
+		education.Country,
+		education.Establishment,
+		education.PeriodOf,
+		education.PeriodTo,
+		education.Certificate,
+		education.Status,
+		education.Grade,
+		uuid,
+	)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(education.UUID), nil
 }

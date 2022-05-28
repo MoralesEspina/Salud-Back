@@ -33,7 +33,7 @@ func SetCurriculumRoutes(router *mux.Router) {
 	// person.Use(middleware.AuthForAmdmin)
 	curriculum.Handle("", middleware.AuthForAmdminTypeHTTP(curriculumController.Create)).Methods("POST")
 	curriculum.HandleFunc("/{uuid}", curriculumController.GetOne).Methods("GET")
-	curriculum.Handle("/{uuid}", middleware.AuthForAmdminTypeHTTP(curriculumController.Update)).Methods("PUT")
+	curriculum.HandleFunc("/{uuid}", curriculumController.Update).Methods("PUT")
 
 	references := router.PathPrefix("/references").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
@@ -44,6 +44,7 @@ func SetCurriculumRoutes(router *mux.Router) {
 	// person.Use(middleware.AuthForAmdmin)
 	personEducation.Handle("", middleware.AuthForAmdminTypeHTTP(personEducationController.Create)).Methods("POST")
 	personEducation.HandleFunc("/{uuid}", personEducationController.GetEducations).Methods("GET")
+	personEducation.HandleFunc("/{uuid}", personEducationController.Update).Methods("PUT")
 
 	workExp := router.PathPrefix("/workExp").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
