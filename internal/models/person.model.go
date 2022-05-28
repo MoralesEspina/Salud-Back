@@ -19,7 +19,7 @@ type Person struct {
 	Phone          sqlnulls.NullString `json:"phone,omitempty"`
 	DPI            sqlnulls.NullString `json:"dpi,omitempty"`
 	NIT            sqlnulls.NullString `json:"nit,omitempty"`
-	BornDate       sqlnulls.NullString `json:"born_date,omitempty"`
+	BornDate       sqlnulls.NullString `json:"bornDate,omitempty"`
 	Email          sqlnulls.NullString `json:"email,omitempty"`
 	Active         bool                `json:"active,omitempty"`
 }

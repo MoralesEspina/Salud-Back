@@ -16,8 +16,8 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "uuidPerson": "18214f84-f835-4cd0-a2ef-717c9429de08",
-    "direction": "Jalapa",
+    "uuidPerson": "11fab448-9bae-4b35-adce-ccf3a3edbb16",
+    "direction": "4Ta Calle 3",
     "country": "Jalapa",
     "homePhone":"79223564",
     "bornPlace":"Jalapa",
@@ -27,13 +27,13 @@ Authorization: Bearer {{login.response.body.token}}
     "workPhone":"41806704",
     "age":"18",
     "civilStatus":"Casado",
-    "etnia":"Garifuna",
+    "etnia":"Ladino",
     "passport":"123456",
     "license":"123"
     }
 
 ###
-GET {{host}}/curriculums/18214f84-f835-4cd0-a2ef-717c9429de08
+GET {{host}}/curriculums/11fab448-9bae-4b35-adce-ccf3a3edbb16
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
