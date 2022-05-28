@@ -49,4 +49,5 @@ func SetCurriculumRoutes(router *mux.Router) {
 	// person.Use(middleware.AuthForAmdmin)
 	workExp.Handle("", middleware.AuthForAmdminTypeHTTP(workExpController.Create)).Methods("POST")
 	workExp.HandleFunc("/{uuid}", workExpController.GetWorks).Methods("GET")
+
 }

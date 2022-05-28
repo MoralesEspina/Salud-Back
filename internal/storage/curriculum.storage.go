@@ -56,7 +56,33 @@ func (*repoCurriculum) GetOne(ctx context.Context, uuid string) (models.Curricul
 	curriculum := models.Curriculum{}
 
 	query := `
-	SELECT * FROM curriculum where uuidPerson = ?;`
+	SELECT 
+		c.uuid,
+		c.uuidPerson,
+        c.direction, 
+        c.country,
+        c.homePhone,
+        c.bornPlace,
+        c.nacionality,
+        c.municipality, 
+		c.village, 
+		c.workPhone  ,
+		c.age ,
+		c.civilStatus ,
+		c.etnia ,
+		c.passport ,
+		c.license ,
+		c.department ,
+		c.igss,
+        p.phone as phone,
+		p.DPI as DPI,
+        p.NIT as NIT,
+        p.bornDate as bornDate,
+        p.email as email,
+        p.fullname as fullname
+    FROM curriculum c
+        INNER JOIN person p ON c.uuidPerson = p.uuid
+    WHERE p.uuid = ?;`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&curriculum.UUID,
@@ -74,6 +100,14 @@ func (*repoCurriculum) GetOne(ctx context.Context, uuid string) (models.Curricul
 		&curriculum.Etnia,
 		&curriculum.Passport,
 		&curriculum.License,
+		&curriculum.Department,
+		&curriculum.IGSS,
+		&curriculum.Person.Phone,
+		&curriculum.Person.DPI,
+		&curriculum.Person.NIT,
+		&curriculum.Person.BornDate,
+		&curriculum.Person.Email,
+		&curriculum.Person.Fullname,
 	)
 
 	if err == sql.ErrNoRows {
