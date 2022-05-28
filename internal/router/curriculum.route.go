@@ -42,7 +42,7 @@ func SetCurriculumRoutes(router *mux.Router) {
 
 	personEducation := router.PathPrefix("/personEducation").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
-	personEducation.Handle("", middleware.AuthForAmdminTypeHTTP(personEducationController.Create)).Methods("POST")
+	personEducation.HandleFunc("", personEducationController.Create).Methods("POST")
 	personEducation.HandleFunc("/{uuid}", personEducationController.GetEducations).Methods("GET")
 	personEducation.HandleFunc("/{uuid}", personEducationController.Update).Methods("PUT")
 
