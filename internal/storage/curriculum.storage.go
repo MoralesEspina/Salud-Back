@@ -138,7 +138,9 @@ func (*repoCurriculum) Update(ctx context.Context, uuid string, curriculum model
 					civilStatus = ?,
 					etnia = ?,
 					passport = ?,
-					license = ? `
+					license = ?,
+					department = ?,
+					igss = ? `
 
 	query += " WHERE uuidPerson = ?;"
 
@@ -158,6 +160,8 @@ func (*repoCurriculum) Update(ctx context.Context, uuid string, curriculum model
 		curriculum.Etnia,
 		curriculum.Passport,
 		curriculum.License,
+		curriculum.Department,
+		curriculum.IGSS,
 		uuid,
 	)
 
