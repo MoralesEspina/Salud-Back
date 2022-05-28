@@ -9,8 +9,8 @@ type References struct {
 	Name         sqlnulls.NullString `json:"name,omitempty"`
 	Phone        sqlnulls.NullString `json:"phone,omitempty"`
 	Relationship sqlnulls.NullString `json:"relationship,omitempty"`
-	BornDate     sqlnulls.NullString `json:"borndate,omitempty"`
+	BornDate     sqlnulls.NullString `json:"bornDate,omitempty"`
 	Profession   sqlnulls.NullString `json:"profession,omitempty"`
 	Company      sqlnulls.NullString `json:"company,omitempty"`
-	IsFamiliar   bool                `json:"isfamiliar,omitempty"`
+	IsFamiliar   bool                `json:"isFamiliar,omitempty"`
 }
