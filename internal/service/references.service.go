@@ -25,16 +25,21 @@ func NewReferencesService(referencesStorage storage.ReferencesStorage) Reference
 
 // ReferencesService implementa el conjunto de metodos de servicio para usuario
 type ReferencesService interface {
-	Create(ctx context.Context, references models.References) (models.References, error)
-	GetReferences(ctx context.Context, uuid string) ([]models.References, error)
+	CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error)
+	GetRefPer(ctx context.Context, uuid string) ([]models.References, error)
+	GetRefFam(ctx context.Context, uuid string) ([]models.References, error)
 }
 
-func (*referencesService) Create(ctx context.Context, references models.References) (models.References, error) {
+func (*referencesService) CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error) {
 	uuidString := fmt.Sprintf(`{"uuid": "%s"}`, uuid.New().String())
 	json.Unmarshal([]byte(uuidString), &references)
-	return ReferencesStorage.Create(ctx, references)
+	return ReferencesStorage.CreateRefFamiliar(ctx, references)
 }
 
-func (*referencesService) GetReferences(ctx context.Context, uuid string) ([]models.References, error) {
-	return ReferencesStorage.GetReferences(ctx, uuid)
+func (*referencesService) GetRefPer(ctx context.Context, uuid string) ([]models.References, error) {
+	return ReferencesStorage.GetRefPer(ctx, uuid)
+}
+
+func (*referencesService) GetRefFam(ctx context.Context, uuid string) ([]models.References, error) {
+	return ReferencesStorage.GetRefFam(ctx, uuid)
 }

@@ -63,7 +63,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-POST {{host}}/references
+POST {{host}}/references/refFam
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -73,14 +73,17 @@ Authorization: Bearer {{login.response.body.token}}
     "phone": "41806704",
     "relationship":"Hermano",
     "bornDate": "2001-06-17",
-    "profession":"Catador",
-    "company":"AnimeFLV",
     "isFamiliar": true
     }
 
 
 ###
-GET {{host}}/references/18214f84-f835-4cd0-a2ef-717c9429de08
+GET {{host}}/references/refFam/18214f84-f835-4cd0-a2ef-717c9429de08
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/references/refPer/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 

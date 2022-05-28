@@ -37,8 +37,9 @@ func SetCurriculumRoutes(router *mux.Router) {
 
 	references := router.PathPrefix("/references").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
-	references.HandleFunc("", referencesController.Create).Methods("POST")
-	references.HandleFunc("/{uuid}", referencesController.GetReferences).Methods("GET")
+	references.HandleFunc("/refFam", referencesController.CreateRefFamiliar).Methods("POST")
+	references.HandleFunc("/refFam/{uuid}", referencesController.GetRefFam).Methods("GET")
+	references.HandleFunc("/refPer/{uuid}", referencesController.GetRefPer).Methods("GET")
 
 	personEducation := router.PathPrefix("/personEducation").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
