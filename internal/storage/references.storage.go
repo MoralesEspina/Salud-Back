@@ -32,9 +32,9 @@ func (*repoReferences) CreateRefFamiliar(ctx context.Context, references models.
 		references.Phone,
 		references.Relationship,
 		references.BornDate,
-		references.IsFamiliar,
 		references.Profession,
 		references.Company,
+		references.IsFamiliar,
 	)
 
 	if err != nil {
