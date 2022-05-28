@@ -23,7 +23,7 @@ type CurriculumStorage interface {
 }
 
 func (*repoCurriculum) Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error) {
-	query := `INSERT INTO curriculum VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
+	query := `INSERT INTO curriculum VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
 
 	_, err := db.QueryContext(
 		ctx,
@@ -43,6 +43,8 @@ func (*repoCurriculum) Create(ctx context.Context, curriculum models.Curriculum)
 		curriculum.Etnia,
 		curriculum.Passport,
 		curriculum.License,
+		curriculum.Department,
+		curriculum.IGSS,
 	)
 
 	if err != nil {
