@@ -27,6 +27,7 @@ func NewPersonEducationController(personEducationService service.PersonEducation
 type PersonEducationController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetEducations(w http.ResponseWriter, r *http.Request)
+	DeleteEducations(w http.ResponseWriter, r *http.Request)
 }
 
 func (*personEducationController) Create(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +103,34 @@ func (*personEducationController) GetEducations(w http.ResponseWriter, r *http.R
 
 	if err != nil {
 		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*personEducationController) DeleteEducations(w http.ResponseWriter, r *http.Request) {
+	uuid := mux.Vars(r)["uuid"]
+	_, err := IPersonEducationService.DeleteEducations(r.Context(), uuid)
+	if err != nil {
+		if err == lib.ErrNotFound {
+			respond(w, response{
+				Ok:      false,
+				Data:    emptyArray,
+				Message: lib.ErrNotFound.Error(),
+			}, http.StatusNotFound)
+			return
+		}
+
+		respondError(w, err)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: uuid,
+		}, http.StatusOK)
 		return
 	}
 

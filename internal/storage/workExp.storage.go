@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 
+	"github.com/DasJalapa/reportes-salud/internal/lib"
 	"github.com/DasJalapa/reportes-salud/internal/models"
 )
 
@@ -17,6 +18,7 @@ type repoWorkExp struct {
 type WorkExpStorage interface {
 	Create(ctx context.Context, workExp models.WorkExp) (models.WorkExp, error)
 	GetWorks(ctx context.Context, uuid string) ([]models.WorkExp, error)
+	DeleteWorks(ctx context.Context, uuid string) (string, error)
 }
 
 func (*repoWorkExp) Create(ctx context.Context, workExp models.WorkExp) (models.WorkExp, error) {
@@ -76,4 +78,20 @@ func (*repoWorkExp) GetWorks(ctx context.Context, uuid string) ([]models.WorkExp
 		works = append(works, work)
 	}
 	return works, nil
+}
+
+func (*repoWorkExp) DeleteWorks(ctx context.Context, uuid string) (string, error) {
+	queryUpdate := "DELETE FROM workexp WHERE uuid = ?;"
+
+	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
+	if err != nil {
+		return "", err
+	}
+
+	resultDelete, _ := rows.RowsAffected()
+	if resultDelete == 0 {
+		return "", lib.ErrNotFound
+	}
+
+	return uuid, nil
 }

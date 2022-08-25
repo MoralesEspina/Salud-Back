@@ -27,6 +27,7 @@ func NewPersonEducationService(personEducationStorage storage.PersonEducationSto
 type PersonEducationService interface {
 	Create(ctx context.Context, references models.PersonEducation) (models.PersonEducation, error)
 	GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error)
+	DeleteEducations(ctx context.Context, uuid string) (string, error)
 }
 
 func (*personEducationService) Create(ctx context.Context, personEducation models.PersonEducation) (models.PersonEducation, error) {
@@ -37,4 +38,8 @@ func (*personEducationService) Create(ctx context.Context, personEducation model
 
 func (*personEducationService) GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error) {
 	return PersonEducationStorage.GetEducations(ctx, uuid)
+}
+
+func (*personEducationService) DeleteEducations(ctx context.Context, uuid string) (string, error) {
+	return PersonEducationStorage.DeleteEducations(ctx, uuid)
 }

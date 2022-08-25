@@ -39,14 +39,17 @@ func SetCurriculumRoutes(router *mux.Router) {
 	// person.Use(middleware.AuthForAmdmin)
 	references.Handle("", middleware.AuthForAmdminTypeHTTP(referencesController.Create)).Methods("POST")
 	references.HandleFunc("/{uuid}", referencesController.GetReferences).Methods("GET")
+	references.HandleFunc("/{uuid}", referencesController.DeleteReferences).Methods("DELETE")
 
 	personEducation := router.PathPrefix("/personEducation").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
 	personEducation.Handle("", middleware.AuthForAmdminTypeHTTP(personEducationController.Create)).Methods("POST")
 	personEducation.HandleFunc("/{uuid}", personEducationController.GetEducations).Methods("GET")
+	personEducation.HandleFunc("/{uuid}", personEducationController.DeleteEducations).Methods("DELETE")
 
 	workExp := router.PathPrefix("/workExp").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
 	workExp.Handle("", middleware.AuthForAmdminTypeHTTP(workExpController.Create)).Methods("POST")
 	workExp.HandleFunc("/{uuid}", workExpController.GetWorks).Methods("GET")
+	workExp.HandleFunc("/{uuid}", workExpController.DeleteWorks).Methods("DELETE")
 }

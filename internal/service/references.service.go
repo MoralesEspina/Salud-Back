@@ -27,6 +27,7 @@ func NewReferencesService(referencesStorage storage.ReferencesStorage) Reference
 type ReferencesService interface {
 	Create(ctx context.Context, references models.References) (models.References, error)
 	GetReferences(ctx context.Context, uuid string) ([]models.References, error)
+	DeleteReferences(ctx context.Context, uuid string) (string, error)
 }
 
 func (*referencesService) Create(ctx context.Context, references models.References) (models.References, error) {
@@ -37,4 +38,8 @@ func (*referencesService) Create(ctx context.Context, references models.Referenc
 
 func (*referencesService) GetReferences(ctx context.Context, uuid string) ([]models.References, error) {
 	return ReferencesStorage.GetReferences(ctx, uuid)
+}
+
+func (*referencesService) DeleteReferences(ctx context.Context, uuid string) (string, error) {
+	return ReferencesStorage.DeleteReferences(ctx, uuid)
 }
