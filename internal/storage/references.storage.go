@@ -2,9 +2,7 @@ package storage
 
 import (
 	"context"
-	"database/sql"
 
-	"github.com/DasJalapa/reportes-salud/internal/lib"
 	"github.com/DasJalapa/reportes-salud/internal/models"
 )
 
@@ -17,13 +15,18 @@ type repoReferences struct {
 }
 
 type ReferencesStorage interface {
+
 	Create(ctx context.Context, references models.References) (models.References, error)
 	GetOne(ctx context.Context, uuid string) (models.References, error)
 	GetReferences(ctx context.Context, uuid string) ([]models.References, error)
 	DeleteReferences(ctx context.Context, uuid string) (string, error)
+	CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error)
+	GetRefFam(ctx context.Context, uuid string) ([]models.References, error)
+	GetRefPer(ctx context.Context, uuid string) ([]models.References, error)
+
 }
 
-func (*repoReferences) Create(ctx context.Context, references models.References) (models.References, error) {
+func (*repoReferences) CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error) {
 	query := `INSERT INTO u1ntiesb2kvna45k.references VALUES(?,?,?,?,?,?,?,?,?);`
 
 	_, err := db.QueryContext(
@@ -47,59 +50,69 @@ func (*repoReferences) Create(ctx context.Context, references models.References)
 	return references, nil
 }
 
-func (*repoReferences) GetOne(ctx context.Context, uuid string) (models.References, error) {
-	references := models.References{}
-
-	query := `
-	SELECT * FROM u1ntiesb2kvna45k.references where uuidPerson = ?;`
-
-	err := db.QueryRowContext(ctx, query, uuid).Scan(
-		&references.UUID,
-		&references.UuidPerson,
-		&references.Name,
-		&references.Phone,
-		&references.Relationship,
-		&references.BornDate,
-		&references.Profession,
-		&references.Company,
-		&references.IsFamiliar,
-	)
-
-	if err == sql.ErrNoRows {
-		return references, lib.ErrNotFound
-	}
-
-	if err != nil {
-		return references, err
-	}
-
-	return references, nil
-}
-
-func (*repoReferences) GetReferences(ctx context.Context, uuid string) ([]models.References, error) {
+func (*repoReferences) GetRefFam(ctx context.Context, uuid string) ([]models.References, error) {
 	reference := models.References{}
 	references := []models.References{}
-	query := `SELECT * FROM u1ntiesb2kvna45k.references where uuidPerson = ?;`
+
+	query := `
+	SELECT  uuid,
+			name,
+			phone,
+			relationship,
+			borndate FROM u1ntiesb2kvna45k.references where uuidPerson = ? And isFamiliar = true;`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
+
 	if err != nil {
 		return references, err
 	}
-
 	for rows.Next() {
-		err := rows.Scan(&reference.UUID,
-			&reference.UuidPerson,
+		err := rows.Scan(
+			&reference.UUID,
 			&reference.Name,
 			&reference.Phone,
 			&reference.Relationship,
 			&reference.BornDate,
-			&reference.Profession,
-			&reference.Company,
-			&reference.IsFamiliar)
+		)
+
 		if err != nil {
 			return references, err
 		}
+		references = append(references, reference)
+	}
+	return references, nil
+}
 
+func (*repoReferences) GetRefPer(ctx context.Context, uuid string) ([]models.References, error) {
+	reference := models.References{}
+	references := []models.References{}
+
+	query := `
+	SELECT  uuid,
+			name,
+			phone,
+			relationship,
+			profession,
+			company FROM u1ntiesb2kvna45k.references where uuidPerson = ? And isFamiliar = false;`
+
+	rows, err := db.QueryContext(ctx, query, uuid)
+
+	if err != nil {
+		return references, err
+	}
+	for rows.Next() {
+		err := rows.Scan(
+			&reference.UUID,
+			&reference.Name,
+			&reference.Phone,
+			&reference.Relationship,
+			&reference.Profession,
+			&reference.Company,
+		)
+
+		if err != nil {
+			return references, err
+		}
 		references = append(references, reference)
 	}
 	return references, nil

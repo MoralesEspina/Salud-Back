@@ -17,6 +17,7 @@ type repoPersonEducation struct {
 
 type PersonEducationStorage interface {
 	Create(ctx context.Context, personEducation models.PersonEducation) (models.PersonEducation, error)
+	Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error)
 	GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error)
 	DeleteEducations(ctx context.Context, uuid string) (string, error)
 }
@@ -78,6 +79,32 @@ func (*repoPersonEducation) DeleteEducations(ctx context.Context, uuid string) (
 	queryUpdate := "DELETE FROM personeducation WHERE uuid = ?;"
 
 	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
+func (*repoPersonEducation) Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error) {
+
+	query := `UPDATE personeducation SET 
+					country = ?, 
+					establishment = ?, 
+					periodof = ?, 
+					periodto = ?, 
+					certificate = ?, 
+					status = ?, 
+					grade = ?`
+
+	query += " WHERE uuid = ?;"
+
+	_, err := db.QueryContext(
+		ctx,
+		query,
+		education.Country,
+		education.Establishment,
+		education.PeriodOf,
+		education.PeriodTo,
+		education.Certificate,
+		education.Status,
+		education.Grade,
+		uuid,
+	)
+
 	if err != nil {
 		return "", err
 	}
@@ -88,4 +115,5 @@ func (*repoPersonEducation) DeleteEducations(ctx context.Context, uuid string) (
 	}
 
 	return uuid, nil
+	return string(education.UUID), nil
 }

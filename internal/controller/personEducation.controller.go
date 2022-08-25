@@ -28,6 +28,7 @@ type PersonEducationController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetEducations(w http.ResponseWriter, r *http.Request)
 	DeleteEducations(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
 }
 
 func (*personEducationController) Create(w http.ResponseWriter, r *http.Request) {
@@ -75,6 +76,7 @@ func (*personEducationController) Create(w http.ResponseWriter, r *http.Request)
 }
 
 func (*personEducationController) GetEducations(w http.ResponseWriter, r *http.Request) {
+
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
@@ -130,7 +132,31 @@ func (*personEducationController) DeleteEducations(w http.ResponseWriter, r *htt
 		respond(w, response{
 			Ok:   true,
 			Data: uuid,
+func (*personEducationController) Update(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	var education models.PersonEducation
+
+	if err := json.NewDecoder(r.Body).Decode(&education); err != nil {
+		respond(w, response{
+			Ok:      false,
+			Message: err.Error(),
+		}, http.StatusBadRequest)
+		return
+	}
+
+	idUpdated, err := IPersonEducationService.Update(r.Context(), mux.Vars(r)["uuid"], education)
+
+	if err == nil {
+		respond(w, response{
+			Ok:       true,
+			Message:  "Registro actualizado satisfactoriamente",
+			IDInsert: idUpdated,
 		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
 		return
 	}
 

@@ -16,8 +16,8 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
-    "direction": "Jalapa",
+    "uuidPerson": "11fab448-9bae-4b35-adce-ccf3a3edbb16",
+    "direction": "4Ta Calle 3",
     "country": "Jalapa",
     "homePhone":"79223564",
     "bornPlace":"Jalapa",
@@ -27,18 +27,18 @@ Authorization: Bearer {{login.response.body.token}}
     "workPhone":"41806704",
     "age":"18",
     "civilStatus":"Casado",
-    "etnia":"Garifuna",
+    "etnia":"Ladino",
     "passport":"123456",
     "license":"123"
     }
 
 ###
-GET {{host}}/curriculums/001490e6-e5b7-48bb-8387-7f63c19cf604
+GET {{host}}/curriculums/11fab448-9bae-4b35-adce-ccf3a3edbb16
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-PUT {{host}}/curriculums/001490e6-e5b7-48bb-8387-7f63c19cf604
+PUT {{host}}/curriculums/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -63,24 +63,27 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-POST {{host}}/references
+POST {{host}}/references/refFam
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "uuidPerson": "18214f84-f835-4cd0-a2ef-717c9429de08",
     "name": "Donal",
     "phone": "41806704",
     "relationship":"Hermano",
     "bornDate": "2001-06-17",
-    "profession":"Catador",
-    "company":"AnimeFLV",
     "isFamiliar": true
     }
 
 
 ###
-GET {{host}}/references/001490e6-e5b7-48bb-8387-7f63c19cf604
+GET {{host}}/references/refFam/18214f84-f835-4cd0-a2ef-717c9429de08
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/references/refPer/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -90,7 +93,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "uuidPerson": "18214f84-f835-4cd0-a2ef-717c9429de08",
     "country": "Jalapa",
     "establishment": "Ni idea",
     "periodOf":"2001-06-17",
@@ -102,7 +105,7 @@ Authorization: Bearer {{login.response.body.token}}
 
 
 ###
-GET {{host}}/personEducation/001490e6-e5b7-48bb-8387-7f63c19cf604
+GET  {{host}}/personEducation/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -112,7 +115,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "uuidPerson": "18214f84-f835-4cd0-a2ef-717c9429de08",
     "direction": "Jalapa, Jalapa",
     "phone": "41806704",
     "reason":"Hueva",
@@ -127,6 +130,6 @@ Authorization: Bearer {{login.response.body.token}}
 
 
 ###
-GET {{host}}/workExp/001490e6-e5b7-48bb-8387-7f63c19cf604
+GET {{host}}/workExp/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}

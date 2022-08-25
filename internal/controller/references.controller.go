@@ -25,12 +25,16 @@ func NewReferencesController(referencesService service.ReferencesService) Refere
 
 // ReferencesController contiene todos los controladores de usuario
 type ReferencesController interface {
+
 	Create(w http.ResponseWriter, r *http.Request)
 	GetReferences(w http.ResponseWriter, r *http.Request)
 	DeleteReferences(w http.ResponseWriter, r *http.Request)
+	CreateRefFamiliar(w http.ResponseWriter, r *http.Request)
+	GetRefPer(w http.ResponseWriter, r *http.Request)
+	GetRefFam(w http.ResponseWriter, r *http.Request)
 }
 
-func (*referencesController) Create(w http.ResponseWriter, r *http.Request) {
+func (*referencesController) CreateRefFamiliar(w http.ResponseWriter, r *http.Request) {
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
@@ -47,7 +51,7 @@ func (*referencesController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := IReferencesService.Create(r.Context(), request)
+	result, err := IReferencesService.CreateRefFamiliar(r.Context(), request)
 	if err == nil {
 		respond(w, response{
 			Ok:      true,
@@ -74,7 +78,7 @@ func (*referencesController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (*referencesController) GetReferences(w http.ResponseWriter, r *http.Request) {
+func (*referencesController) GetRefPer(w http.ResponseWriter, r *http.Request) {
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
@@ -83,7 +87,42 @@ func (*referencesController) GetReferences(w http.ResponseWriter, r *http.Reques
 
 	vars := mux.Vars(r)
 
-	data, err := IReferencesService.GetReferences(r.Context(), vars["uuid"])
+	data, err := IReferencesService.GetRefPer(r.Context(), vars["uuid"])
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*referencesController) GetRefFam(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	data, err := IReferencesService.GetRefFam(r.Context(), vars["uuid"])
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,

@@ -33,23 +33,28 @@ func SetCurriculumRoutes(router *mux.Router) {
 	// person.Use(middleware.AuthForAmdmin)
 	curriculum.Handle("", middleware.AuthForAmdminTypeHTTP(curriculumController.Create)).Methods("POST")
 	curriculum.HandleFunc("/{uuid}", curriculumController.GetOne).Methods("GET")
-	curriculum.Handle("/{uuid}", middleware.AuthForAmdminTypeHTTP(curriculumController.Update)).Methods("PUT")
+	curriculum.HandleFunc("/{uuid}", curriculumController.Update).Methods("PUT")
 
 	references := router.PathPrefix("/references").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
 	references.Handle("", middleware.AuthForAmdminTypeHTTP(referencesController.Create)).Methods("POST")
 	references.HandleFunc("/{uuid}", referencesController.GetReferences).Methods("GET")
 	references.HandleFunc("/{uuid}", referencesController.DeleteReferences).Methods("DELETE")
+	references.HandleFunc("/refFam", referencesController.CreateRefFamiliar).Methods("POST")
+	references.HandleFunc("/refFam/{uuid}", referencesController.GetRefFam).Methods("GET")
+	references.HandleFunc("/refPer/{uuid}", referencesController.GetRefPer).Methods("GET")
 
 	personEducation := router.PathPrefix("/personEducation").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
-	personEducation.Handle("", middleware.AuthForAmdminTypeHTTP(personEducationController.Create)).Methods("POST")
+	personEducation.HandleFunc("", personEducationController.Create).Methods("POST")
 	personEducation.HandleFunc("/{uuid}", personEducationController.GetEducations).Methods("GET")
 	personEducation.HandleFunc("/{uuid}", personEducationController.DeleteEducations).Methods("DELETE")
+	personEducation.HandleFunc("/{uuid}", personEducationController.Update).Methods("PUT")
 
 	workExp := router.PathPrefix("/workExp").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)
-	workExp.Handle("", middleware.AuthForAmdminTypeHTTP(workExpController.Create)).Methods("POST")
+	workExp.HandleFunc("", workExpController.Create).Methods("POST")
 	workExp.HandleFunc("/{uuid}", workExpController.GetWorks).Methods("GET")
 	workExp.HandleFunc("/{uuid}", workExpController.DeleteWorks).Methods("DELETE")
+
 }

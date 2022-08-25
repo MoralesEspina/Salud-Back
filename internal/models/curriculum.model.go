@@ -19,4 +19,7 @@ type Curriculum struct {
 	Etnia        sqlnulls.NullString `json:"etnia,omitempty"`
 	Passport     sqlnulls.NullString `json:"passport,omitempty"`
 	License      sqlnulls.NullString `json:"license,omitempty"`
+	Department   sqlnulls.NullString `json:"department,omitempty"`
+	IGSS         sqlnulls.NullString `json:"igss,omitempty"`
+	Person
 }
