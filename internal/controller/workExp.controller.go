@@ -27,6 +27,7 @@ func NewWorkExpController(workExpService service.WorkExpService) WorkExpControll
 type WorkExpController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetWorks(w http.ResponseWriter, r *http.Request)
+	DeleteWorks(w http.ResponseWriter, r *http.Request)
 }
 
 func (*workExpController) Create(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +103,34 @@ func (*workExpController) GetWorks(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*workExpController) DeleteWorks(w http.ResponseWriter, r *http.Request) {
+	uuid := mux.Vars(r)["uuid"]
+	_, err := IWorkExpService.DeleteWorks(r.Context(), uuid)
+	if err != nil {
+		if err == lib.ErrNotFound {
+			respond(w, response{
+				Ok:      false,
+				Data:    emptyArray,
+				Message: lib.ErrNotFound.Error(),
+			}, http.StatusNotFound)
+			return
+		}
+
+		respondError(w, err)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: uuid,
+		}, http.StatusOK)
 		return
 	}
 

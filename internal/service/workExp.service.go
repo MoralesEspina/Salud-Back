@@ -27,6 +27,7 @@ func NewWorkExpService(workExpStorage storage.WorkExpStorage) WorkExpService {
 type WorkExpService interface {
 	Create(ctx context.Context, references models.WorkExp) (models.WorkExp, error)
 	GetWorks(ctx context.Context, uuid string) ([]models.WorkExp, error)
+	DeleteWorks(ctx context.Context, uuid string) (string, error)
 }
 
 func (*workExpService) Create(ctx context.Context, workExp models.WorkExp) (models.WorkExp, error) {
@@ -37,4 +38,8 @@ func (*workExpService) Create(ctx context.Context, workExp models.WorkExp) (mode
 
 func (*workExpService) GetWorks(ctx context.Context, uuid string) ([]models.WorkExp, error) {
 	return WorkExpStorage.GetWorks(ctx, uuid)
+}
+
+func (*workExpService) DeleteWorks(ctx context.Context, uuid string) (string, error) {
+	return WorkExpStorage.DeleteWorks(ctx, uuid)
 }

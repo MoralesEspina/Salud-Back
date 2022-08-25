@@ -25,6 +25,10 @@ func NewReferencesService(referencesStorage storage.ReferencesStorage) Reference
 
 // ReferencesService implementa el conjunto de metodos de servicio para usuario
 type ReferencesService interface {
+
+	Create(ctx context.Context, references models.References) (models.References, error)
+	GetReferences(ctx context.Context, uuid string) ([]models.References, error)
+	DeleteReferences(ctx context.Context, uuid string) (string, error)
 	CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error)
 	GetRefPer(ctx context.Context, uuid string) ([]models.References, error)
 	GetRefFam(ctx context.Context, uuid string) ([]models.References, error)
@@ -42,4 +46,8 @@ func (*referencesService) GetRefPer(ctx context.Context, uuid string) ([]models.
 
 func (*referencesService) GetRefFam(ctx context.Context, uuid string) ([]models.References, error) {
 	return ReferencesStorage.GetRefFam(ctx, uuid)
+}
+
+func (*referencesService) DeleteReferences(ctx context.Context, uuid string) (string, error) {
+	return ReferencesStorage.DeleteReferences(ctx, uuid)
 }

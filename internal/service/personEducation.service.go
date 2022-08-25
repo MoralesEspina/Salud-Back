@@ -28,6 +28,7 @@ type PersonEducationService interface {
 	Create(ctx context.Context, references models.PersonEducation) (models.PersonEducation, error)
 	Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error)
 	GetEducations(ctx context.Context, uuid string) ([]models.PersonEducation, error)
+	DeleteEducations(ctx context.Context, uuid string) (string, error)
 }
 
 func (*personEducationService) Create(ctx context.Context, personEducation models.PersonEducation) (models.PersonEducation, error) {
@@ -40,6 +41,10 @@ func (*personEducationService) GetEducations(ctx context.Context, uuid string) (
 	return PersonEducationStorage.GetEducations(ctx, uuid)
 }
 
+func (*personEducationService) DeleteEducations(ctx context.Context, uuid string) (string, error) {
+	return PersonEducationStorage.DeleteEducations(ctx, uuid)
+ }
+ 
 func (*personEducationService) Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error) {
 	return PersonEducationStorage.Update(ctx, uuid, education)
 }
