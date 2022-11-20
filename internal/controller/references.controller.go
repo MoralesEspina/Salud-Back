@@ -25,10 +25,6 @@ func NewReferencesController(referencesService service.ReferencesService) Refere
 
 // ReferencesController contiene todos los controladores de usuario
 type ReferencesController interface {
-
-	Create(w http.ResponseWriter, r *http.Request)
-	GetReferences(w http.ResponseWriter, r *http.Request)
-	DeleteReferences(w http.ResponseWriter, r *http.Request)
 	CreateRefFamiliar(w http.ResponseWriter, r *http.Request)
 	GetRefPer(w http.ResponseWriter, r *http.Request)
 	GetRefFam(w http.ResponseWriter, r *http.Request)
@@ -142,34 +138,6 @@ func (*referencesController) GetRefFam(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		respondError(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-func (*referencesController) DeleteReferences(w http.ResponseWriter, r *http.Request) {
-	uuid := mux.Vars(r)["uuid"]
-	_, err := IReferencesService.DeleteReferences(r.Context(), uuid)
-	if err != nil {
-		if err == lib.ErrNotFound {
-			respond(w, response{
-				Ok:      false,
-				Data:    emptyArray,
-				Message: lib.ErrNotFound.Error(),
-			}, http.StatusNotFound)
-			return
-		}
-
-		respondError(w, err)
-		return
-	}
-
-	if err == nil {
-		respond(w, response{
-			Ok:   true,
-			Data: uuid,
-		}, http.StatusOK)
 		return
 	}
 

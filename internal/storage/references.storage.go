@@ -15,15 +15,9 @@ type repoReferences struct {
 }
 
 type ReferencesStorage interface {
-
-	Create(ctx context.Context, references models.References) (models.References, error)
-	GetOne(ctx context.Context, uuid string) (models.References, error)
-	GetReferences(ctx context.Context, uuid string) ([]models.References, error)
-	DeleteReferences(ctx context.Context, uuid string) (string, error)
 	CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error)
 	GetRefFam(ctx context.Context, uuid string) ([]models.References, error)
 	GetRefPer(ctx context.Context, uuid string) ([]models.References, error)
-
 }
 
 func (*repoReferences) CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error) {
@@ -116,20 +110,4 @@ func (*repoReferences) GetRefPer(ctx context.Context, uuid string) ([]models.Ref
 		references = append(references, reference)
 	}
 	return references, nil
-}
-
-func (*repoReferences) DeleteReferences(ctx context.Context, uuid string) (string, error) {
-	queryUpdate := "DELETE FROM u1ntiesb2kvna45k.references WHERE uuid = ?;"
-
-	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
-	if err != nil {
-		return "", err
-	}
-
-	resultDelete, _ := rows.RowsAffected()
-	if resultDelete == 0 {
-		return "", lib.ErrNotFound
-	}
-
-	return uuid, nil
 }

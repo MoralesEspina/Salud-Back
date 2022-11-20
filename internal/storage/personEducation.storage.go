@@ -79,6 +79,18 @@ func (*repoPersonEducation) DeleteEducations(ctx context.Context, uuid string) (
 	queryUpdate := "DELETE FROM personeducation WHERE uuid = ?;"
 
 	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
+	if err != nil {
+		return "", err
+	}
+
+	resultDelete, _ := rows.RowsAffected()
+	if resultDelete == 0 {
+		return "", lib.ErrNotFound
+	}
+
+	return uuid, nil
+}
+
 func (*repoPersonEducation) Update(ctx context.Context, uuid string, education models.PersonEducation) (string, error) {
 
 	query := `UPDATE personeducation SET 
@@ -109,11 +121,5 @@ func (*repoPersonEducation) Update(ctx context.Context, uuid string, education m
 		return "", err
 	}
 
-	resultDelete, _ := rows.RowsAffected()
-	if resultDelete == 0 {
-		return "", lib.ErrNotFound
-	}
-
-	return uuid, nil
 	return string(education.UUID), nil
 }

@@ -132,6 +132,13 @@ func (*personEducationController) DeleteEducations(w http.ResponseWriter, r *htt
 		respond(w, response{
 			Ok:   true,
 			Data: uuid,
+		}, http.StatusOK)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (*personEducationController) Update(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var education models.PersonEducation
