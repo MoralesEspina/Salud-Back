@@ -11,37 +11,35 @@ Content-Type: application/json
 }
 
 ###
-POST {{host}}/requestvacations
+POST {{host}}/permission
 Authorization: Bearer {{login.response.body.token}}
 Date: {{$datetime iso8601}}
 Content-Type: application/json
 
 {
-    "last_vacation_from":"2021-05-05",
-    "last_vacation_to":"2021-05-05",
-    "vacation_from_date":"2021-05-05",
-    "vacation_to_date":"2021-05-05",
-    "has_vacation_day":false,
-    "days_quantity":0,
-    "observations":"Noun",
-    "person":{
-        "uuid": "2944b49d-3cce-4e17-87e1-03fa6bbb8501"
-    },
-    "person_server":{
-        "uuid": "5a86e9cf-3d60-4c7e-a292-b3707b80610b"
-    }
+    "submittedAt": "2022-05-05",
+    "modifiedAt": "2022-05-05",
+    "permissionDate": "2022-05-05",
+    "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
+    "bossOne": "00464850-7676-4884-a19d-2d338269aefd",
+    "bossTwo": "00464850-7676-4884-a19d-2d338269aefd",
+    "motive": "No se",
+    "statusBossOne": "No se",
+    "StatusBossTwo": "No se",
+    "reason":" No se",
+    "status":" No se"
 }
 
 ###
-GET {{host}}/requestvacations
+GET {{host}}/permission
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-GET {{host}}/requestvacations/9429092c-9814-40dc-ad06-b511961db4ad
+GET {{host}}/permission/9429092c-9814-40dc-ad06-b511961db4ad
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-PUT {{host}}/requestvacations/5b41f372-bb7e-4f08-b251-3f87b1b5260f
+PUT {{host}}/permission/5b41f372-bb7e-4f08-b251-3f87b1b5260f
 Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 

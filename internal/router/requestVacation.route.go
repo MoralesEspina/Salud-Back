@@ -1,9 +1,6 @@
 package router
 
 import (
-	"fmt"
-	"net/http"
-
 	"github.com/gorilla/mux"
 
 	"github.com/DasJalapa/reportes-salud/internal/controller"
@@ -19,10 +16,6 @@ var (
 
 func SetRequestVacationRoutes(router *mux.Router) *mux.Router {
 	router = router.PathPrefix("/requestvacations").Subrouter()
-
-	router.HandleFunc("/alo/hola", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Probando")
-	})
 	router.HandleFunc("", requestVacationController.Create).Methods("POST")
 	router.HandleFunc("", requestVacationController.GetRequestsVacations).Methods("GET")
 	router.HandleFunc("/{uuid}", requestVacationController.GetOneRequestVacation).Methods("GET")
