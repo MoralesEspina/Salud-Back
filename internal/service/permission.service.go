@@ -38,6 +38,9 @@ func (r *permissionService) Create(ctx context.Context, request models.Permissio
 	request.SubmittedAt = time.DateTime
 	request.ModifiedAt = time.DateTime
 	request.Register = register
+	request.StatusBossOne = "En Espera"
+	request.StatusBossTwo = "En Espera"
+	request.Status = "En Espera"
 
 	return IPermission.Create(ctx, request)
 }

@@ -17,17 +17,11 @@ Date: {{$datetime iso8601}}
 Content-Type: application/json
 
 {
-    "submittedAt": "2022-05-05",
-    "modifiedAt": "2022-05-05",
     "permissionDate": "2022-05-05",
     "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
     "bossOne": "00464850-7676-4884-a19d-2d338269aefd",
     "bossTwo": "00464850-7676-4884-a19d-2d338269aefd",
-    "motive": "No se",
-    "statusBossOne": "No se",
-    "StatusBossTwo": "No se",
-    "reason":" No se",
-    "status":" No se"
+    "motive": "No se"
 }
 
 ###
