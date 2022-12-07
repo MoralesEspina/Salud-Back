@@ -17,15 +17,15 @@ func InitRoutes() *mux.Router {
 	api.Use(middleware.Auth)
 	api.Use(middleware.Loger)
 
-	api = SetUserRoutes(api)
-	api = SetPermissionRoutes(api)
+	SetUserRoutes(api)
+	SetPermissionRoutes(api)
 	SetCurriculumRoutes(api)
-	api = SetPersonRoutes(api)
-	api = SetRequestVacationRoutes(api)
-	api = SetAuthorizationRoutes(api)
-	api = SetJobRoutes(api)
-	api = SetWorkDependencyRoutes(api)
-	api = SetEspecialityRoutes(api)
+	SetJobRoutes(api)
+	SetPersonRoutes(api)
+	SetRequestVacationRoutes(api)
+	SetAuthorizationRoutes(api)
+	SetWorkDependencyRoutes(api)
+	SetEspecialityRoutes(api)
 
 	router.Use(middleware.WriteJSONHeader)
 
