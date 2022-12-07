@@ -140,9 +140,8 @@ func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
 
-	query := `SELECT u.uuid, u.username, r.role, p.fullname FROM user u 
-			  INNER JOIN rol r ON u.rol_id = r.id
-			  INNER JOIN person p ON u.uuidPerson = p.uuid;`
+	query := `SELECT u.uuid, u.username, r.role FROM user u 
+			  INNER JOIN rol r ON u.rol_id = r.id;`
 
 	rows, err := db.QueryContext(ctx, query)
 	if err == sql.ErrNoRows {
@@ -150,7 +149,7 @@ func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person)
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol)
 
 		if err != nil {
 			return users, err
