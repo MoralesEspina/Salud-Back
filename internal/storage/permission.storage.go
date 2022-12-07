@@ -20,6 +20,8 @@ type IPermissionStorage interface {
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
+	GetBosssesOne(ctx context.Context) ([]models.Person, error)
+	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
 }
 
 func (*repoPermission) Create(ctx context.Context, request models.Permission) (models.Permission, error) {
@@ -151,4 +153,50 @@ func (*repoPermission) DeletePermission(ctx context.Context, uuid string) (strin
 	}
 
 	return uuid, nil
+}
+
+func (*repoPermission) GetBosssesOne(ctx context.Context) ([]models.Person, error) {
+	person := models.Person{}
+	persons := []models.Person{}
+	query := `SELECT p.uuid, p.fullname FROM person p
+				 JOIN user u WHERE p.uuid = u.uuidPerson
+				 AND u.rol_id = 4;`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return persons, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&person.UUID, &person.Fullname)
+		if err != nil {
+			return persons, err
+		}
+
+		persons = append(persons, person)
+	}
+	return persons, nil
+}
+
+func (*repoPermission) GetBosssesTwo(ctx context.Context) ([]models.Person, error) {
+	person := models.Person{}
+	persons := []models.Person{}
+	query := `SELECT p.uuid, p.fullname FROM person p
+				 JOIN user u WHERE p.uuid = u.uuidPerson
+				 AND u.rol_id = 6;`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return persons, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&person.UUID, &person.Fullname)
+		if err != nil {
+			return persons, err
+		}
+
+		persons = append(persons, person)
+	}
+	return persons, nil
 }

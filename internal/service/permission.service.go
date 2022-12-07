@@ -25,6 +25,8 @@ type IPermissionService interface {
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
+	GetBosssesOne(ctx context.Context) ([]models.Person, error)
+	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
 }
 
 func (r *permissionService) Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error) {
@@ -75,4 +77,12 @@ func (r *permissionService) UpdatePermission(ctx context.Context, request models
 }
 func (*permissionService) DeletePermission(ctx context.Context, uuid string) (string, error) {
 	return IPermission.DeletePermission(ctx, uuid)
+}
+
+func (*permissionService) GetBosssesOne(ctx context.Context) ([]models.Person, error) {
+	return IPermission.GetBosssesOne(ctx)
+}
+
+func (*permissionService) GetBosssesTwo(ctx context.Context) ([]models.Person, error) {
+	return IPermission.GetBosssesTwo(ctx)
 }

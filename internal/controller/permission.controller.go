@@ -26,6 +26,8 @@ type IPermissionController interface {
 	GetOnePermission(w http.ResponseWriter, r *http.Request)
 	UpdatePermission(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
+	GetBosssesOne(w http.ResponseWriter, r *http.Request)
+	GetBosssesTwo(w http.ResponseWriter, r *http.Request)
 }
 
 func (*permissionController) Create(w http.ResponseWriter, r *http.Request) {
@@ -207,6 +209,62 @@ func (*permissionController) Delete(w http.ResponseWriter, r *http.Request) {
 			Ok:   true,
 			Data: uuid,
 		}, http.StatusOK)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetBosssesOne(w http.ResponseWriter, r *http.Request) {
+
+	data, err := IPermissionService.GetBosssesOne(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetBosssesTwo(w http.ResponseWriter, r *http.Request) {
+
+	data, err := IPermissionService.GetBosssesTwo(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
 		return
 	}
 
