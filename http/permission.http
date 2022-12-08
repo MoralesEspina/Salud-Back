@@ -21,7 +21,8 @@ Content-Type: application/json
     "uuidPerson": "001490e6-e5b7-48bb-8387-7f63c19cf604",
     "bossOne": "00464850-7676-4884-a19d-2d338269aefd",
     "bossTwo": "00464850-7676-4884-a19d-2d338269aefd",
-    "motive": "No se"
+    "motive": "No se",
+    "status": ""
 }
 
 ###

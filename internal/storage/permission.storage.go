@@ -25,7 +25,6 @@ type IPermissionStorage interface {
 }
 
 func (*repoPermission) Create(ctx context.Context, request models.Permission) (models.Permission, error) {
-
 	query := "INSERT INTO permission VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	_, err := db.QueryContext(
@@ -158,7 +157,7 @@ func (*repoPermission) DeletePermission(ctx context.Context, uuid string) (strin
 func (*repoPermission) GetBosssesOne(ctx context.Context) ([]models.Person, error) {
 	person := models.Person{}
 	persons := []models.Person{}
-	query := `SELECT p.uuid, p.fullname FROM person p
+	query := `SELECT u.uuid, p.fullname FROM person p
 				 JOIN user u WHERE p.uuid = u.uuidPerson
 				 AND u.rol_id = 4;`
 
@@ -181,7 +180,7 @@ func (*repoPermission) GetBosssesOne(ctx context.Context) ([]models.Person, erro
 func (*repoPermission) GetBosssesTwo(ctx context.Context) ([]models.Person, error) {
 	person := models.Person{}
 	persons := []models.Person{}
-	query := `SELECT p.uuid, p.fullname FROM person p
+	query := `SELECT u.uuid, p.fullname FROM person p
 				 JOIN user u WHERE p.uuid = u.uuidPerson
 				 AND u.rol_id = 6;`
 
