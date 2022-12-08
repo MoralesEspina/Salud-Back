@@ -58,11 +58,8 @@ func (r *permissionService) GetPermissions(ctx context.Context, uuidUser, role s
 
 	} else {
 		query = `
-		SELECT r.uuid, p.fullname, p.cui, r.submmittedAt FROM vacationrequest r
-		INNER JOIN person p ON r.uuidPerson = p.uuid
-		WHERE user_uuid = ?
-		ORDER BY r.submittedAt DESC`
-		args = append(args, uuidUser)
+		SELECT r.uuid, r.submittedAt, p.fullname, r.bossOne, r.bossTwo FROM permission r
+		INNER JOIN person p ON r.uuidPerson = p.uuid`
 	}
 
 	return IPermission.GetPermissions(ctx, query, args)
