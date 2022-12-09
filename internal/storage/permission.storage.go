@@ -204,7 +204,7 @@ func (*repoPermission) GetBosssesTwo(ctx context.Context) ([]models.Person, erro
 func (*repoPermission) GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid where r.bossOne = ?;`
+	query := `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid where r.bossOne = (Select uuid from user u where u.uuidPerson = ?);`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
