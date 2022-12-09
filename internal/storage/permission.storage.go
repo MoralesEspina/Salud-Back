@@ -77,24 +77,16 @@ func (*repoPermission) GetPermissions(ctx context.Context, query string, argsQue
 func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {
 	request := models.Permission{}
 
-	query := `
-	SELECT 
-		pe.uuid as uuid_request,
-		pe.submmittedAt,
-		pe.permissionDate, 
-		p.uuidPerson,
-		pe.bossOne, 
-		pe.bossTwo, 
-		pe.reasson, 
-		pe.document, 
-		pe.statusBossOne, 
-		pe.statusBossOne, 
-		pe.status, 
-		WHERE pe.uuid = ?;`
+	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive FROM permission where uuid = ?`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&request.Uuid,
 		&request.SubmittedAt,
+		&request.PermissionDate,
+		&request.UuidPerson,
+		&request.BossOne,
+		&request.BossTwo,
+		&request.Motive,
 	)
 
 	if err == sql.ErrNoRows {
@@ -110,7 +102,7 @@ func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (model
 func (*repoPermission) UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error) {
 
 	query := `
-	UPDATE vacationrequest
+	UPDATE permission
 	SET
 		modifiedAt = ?,
 		lastYearVacation = ?,
