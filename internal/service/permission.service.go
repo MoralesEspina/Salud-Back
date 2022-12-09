@@ -27,6 +27,7 @@ type IPermissionService interface {
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
+	GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error)
 }
 
 func (r *permissionService) Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error) {
@@ -53,7 +54,7 @@ func (r *permissionService) GetPermissions(ctx context.Context, uuidUser, role s
 
 	if role == "admin" {
 		query = `
-		SELECT r.uuid, r.submittedAt, p.fullname, r.bossOne, r.bossTwo FROM permission r
+		SELECT r.uuid, r.submittedAt, p.fullname, r.permissionDate FROM permission r
 		INNER JOIN person p ON r.uuidPerson = p.uuid`
 
 	} else {
@@ -82,4 +83,8 @@ func (*permissionService) GetBosssesOne(ctx context.Context) ([]models.Person, e
 
 func (*permissionService) GetBosssesTwo(ctx context.Context) ([]models.Person, error) {
 	return IPermission.GetBosssesTwo(ctx)
+}
+
+func (*permissionService) GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error) {
+	return IPermission.GetPermissionsBossOne(ctx, uuid)
 }

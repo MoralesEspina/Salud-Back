@@ -22,6 +22,7 @@ type IPermissionStorage interface {
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
+	GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error)
 }
 
 func (*repoPermission) Create(ctx context.Context, request models.Permission) (models.Permission, error) {
@@ -122,7 +123,7 @@ func (*repoPermission) UpdatePermission(ctx context.Context, request models.Perm
 		daysQuantity = ?,
 		observations = ?,
 		publicServer_uuid = ?
-	WHERE uuid = ?;
+		WHERE uuid = ?;
 	`
 	_, err := db.QueryContext(
 		ctx,
@@ -157,9 +158,9 @@ func (*repoPermission) DeletePermission(ctx context.Context, uuid string) (strin
 func (*repoPermission) GetBosssesOne(ctx context.Context) ([]models.Person, error) {
 	person := models.Person{}
 	persons := []models.Person{}
-	query := `SELECT u.uuid, p.fullname FROM person p
-				 JOIN user u WHERE p.uuid = u.uuidPerson
-				 AND u.rol_id = 4;`
+	query := `	SELECT u.uuid, p.fullname FROM person p
+				JOIN user u WHERE p.uuid = u.uuidPerson
+				AND u.rol_id IN (4,6);`
 
 	rows, err := db.QueryContext(ctx, query)
 	if err != nil {
@@ -198,4 +199,25 @@ func (*repoPermission) GetBosssesTwo(ctx context.Context) ([]models.Person, erro
 		persons = append(persons, person)
 	}
 	return persons, nil
+}
+
+func (*repoPermission) GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error) {
+	permission := models.Permission{}
+	permissions := []models.Permission{}
+	query := `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid where r.bossOne = ?;`
+
+	rows, err := db.QueryContext(ctx, query, uuid)
+	if err != nil {
+		return permissions, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Person.Fullname)
+		if err != nil {
+			return permissions, err
+		}
+
+		permissions = append(permissions, permission)
+	}
+	return permissions, nil
 }

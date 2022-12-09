@@ -28,6 +28,7 @@ type IPermissionController interface {
 	Delete(w http.ResponseWriter, r *http.Request)
 	GetBosssesOne(w http.ResponseWriter, r *http.Request)
 	GetBosssesTwo(w http.ResponseWriter, r *http.Request)
+	GetPermissionsBossOne(w http.ResponseWriter, r *http.Request)
 }
 
 func (*permissionController) Create(w http.ResponseWriter, r *http.Request) {
@@ -246,6 +247,35 @@ func (*permissionController) GetBosssesOne(w http.ResponseWriter, r *http.Reques
 func (*permissionController) GetBosssesTwo(w http.ResponseWriter, r *http.Request) {
 
 	data, err := IPermissionService.GetBosssesTwo(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetPermissionsBossOne(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	data, err := IPermissionService.GetPermissionsBossOne(r.Context(), vars["uuid"])
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
