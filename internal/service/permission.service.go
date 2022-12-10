@@ -74,6 +74,8 @@ func (r *permissionService) GetOnePermission(ctx context.Context, uuid string) (
 }
 
 func (r *permissionService) UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error) {
+	time := lib.TimeZone("America/Guatemala")
+	request.ModifiedAt = time.DateTime
 	return IPermission.UpdatePermission(ctx, request, uuid)
 }
 func (*permissionService) DeletePermission(ctx context.Context, uuid string) (string, error) {

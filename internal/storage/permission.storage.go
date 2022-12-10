@@ -111,6 +111,7 @@ func (*repoPermission) UpdatePermission(ctx context.Context, request models.Perm
 	query := `
 	UPDATE permission
 	SET
+		modifiedAt = ?,
 		statusBossOne = ?,
 		StatusBossTwo = ?,
 		reason = ?,
@@ -120,6 +121,7 @@ func (*repoPermission) UpdatePermission(ctx context.Context, request models.Perm
 	_, err := db.QueryContext(
 		ctx,
 		query,
+		request.ModifiedAt,
 		request.StatusBossOne,
 		request.StatusBossTwo,
 		request.Reason,
@@ -246,7 +248,7 @@ func (*repoPermission) GetPermissionsBossTwo(ctx context.Context, uuid string) (
 func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status FROM permission r 
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status, p.fullname as bossOne FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid
 				WHERE r.uuidPerson = ?
 				AND r.status LIKE 'En Espera';`
 
@@ -256,7 +258,7 @@ func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid strin
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.StatusBossOne, &permission.StatusBossTwo, &permission.Status)
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.StatusBossOne, &permission.StatusBossTwo, &permission.Status, &permission.BossOne)
 		if err != nil {
 			return permissions, err
 		}
@@ -269,7 +271,7 @@ func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid strin
 func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status FROM permission r 
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status, p.fullname as bossOne FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid
 				WHERE r.uuidPerson = ? 
 				AND r.status NOT LIKE 'En Espera';`
 
@@ -279,7 +281,7 @@ func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]m
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Status)
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Status, &permission.BossOne)
 		if err != nil {
 			return permissions, err
 		}
