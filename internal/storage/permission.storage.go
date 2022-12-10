@@ -203,7 +203,8 @@ func (*repoPermission) GetPermissionsBossOne(ctx context.Context, uuid string) (
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid 
 				WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
-				AND r.statusBossOne LIKE 'En Espera';`
+				AND r.statusBossOne LIKE 'En Espera'
+				ORDER BY r.submittedAt ASC;`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
@@ -227,7 +228,8 @@ func (*repoPermission) GetPermissionsBossTwo(ctx context.Context, uuid string) (
 	query := `	SELECT r.uuid, r.submittedAt, p.fullname as applicant, r.permissionDate, pe.fullname as bossOne from permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid
 				WHERE r.bossTwo = (Select uuid from user u where u.uuidPerson = ?) 
 				AND r.statusBossOne LIKE 'Aceptada'
-				AND r.StatusBossTwo LIKE 'En Espera';`
+				AND r.StatusBossTwo LIKE 'En Espera'
+				ORDER BY r.submittedAt ASC;`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
@@ -250,7 +252,8 @@ func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid strin
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid JOIN user us ON r.bossTwo = us.uuid
 				WHERE r.uuidPerson = ?
-				AND r.status LIKE 'En Espera';`
+				AND r.status LIKE 'En Espera'
+				ORDER BY r.submittedAt ASC;`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
@@ -273,7 +276,8 @@ func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]m
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid JOIN user us ON r.bossTwo = us.uuid
 				WHERE r.uuidPerson = ?
-				AND r.status NOT LIKE 'En Espera';`
+				AND r.status NOT LIKE 'En Espera'
+				ORDER BY r.submittedAt ASC;`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
