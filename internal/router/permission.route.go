@@ -24,5 +24,8 @@ func SetPermissionRoutes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/information/bossone", permissionController.GetBosssesOne).Methods("GET")
 	router.HandleFunc("/information/bosstwo", permissionController.GetBosssesTwo).Methods("GET")
 	router.HandleFunc("/table/bossone/{uuid}", permissionController.GetPermissionsBossOne).Methods("GET")
+	router.HandleFunc("/table/bosstwo/{uuid}", permissionController.GetPermissionsBossTwo).Methods("GET")
+	router.HandleFunc("/table/useractive/{uuid}", permissionController.GetUserPermissionsActives).Methods("GET")
+	router.HandleFunc("/table/user/{uuid}", permissionController.GetUserPermissions).Methods("GET")
 	return router
 }

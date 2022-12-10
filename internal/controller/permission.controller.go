@@ -29,6 +29,9 @@ type IPermissionController interface {
 	GetBosssesOne(w http.ResponseWriter, r *http.Request)
 	GetBosssesTwo(w http.ResponseWriter, r *http.Request)
 	GetPermissionsBossOne(w http.ResponseWriter, r *http.Request)
+	GetPermissionsBossTwo(w http.ResponseWriter, r *http.Request)
+	GetUserPermissionsActives(w http.ResponseWriter, r *http.Request)
+	GetUserPermissions(w http.ResponseWriter, r *http.Request)
 }
 
 func (*permissionController) Create(w http.ResponseWriter, r *http.Request) {
@@ -276,6 +279,93 @@ func (*permissionController) GetPermissionsBossOne(w http.ResponseWriter, r *htt
 	vars := mux.Vars(r)
 
 	data, err := IPermissionService.GetPermissionsBossOne(r.Context(), vars["uuid"])
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetPermissionsBossTwo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	data, err := IPermissionService.GetPermissionsBossTwo(r.Context(), vars["uuid"])
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetUserPermissionsActives(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	data, err := IPermissionService.GetUserPermissionsActives(r.Context(), vars["uuid"])
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetUserPermissions(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	data, err := IPermissionService.GetUserPermissions(r.Context(), vars["uuid"])
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,

@@ -34,7 +34,19 @@ GET {{host}}/permission/information/bossone
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-GET {{host}}/permission/table/bossone/049b0881-f400-4ffb-9b90-cb63cc319d95
+GET {{host}}/permission/table/bossone/9fa7476a-a00a-45e1-ae26-17bb4114c521
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/permission/table/bosstwo/9fa7476a-a00a-45e1-ae26-17bb4114c521
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/permission/table/useractive/9fa7476a-a00a-45e1-ae26-17bb4114c521
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/permission/table/user/9fa7476a-a00a-45e1-ae26-17bb4114c521
 Authorization: Bearer {{login.response.body.token}}
 
 ###
@@ -42,23 +54,17 @@ GET {{host}}/permission/information/bosstwo
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-GET {{host}}/permission/9429092c-9814-40dc-ad06-b511961db4ad
+GET {{host}}/permission/c1dbe6e2-1be4-45da-a8ae-47869408f1f9
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-PUT {{host}}/permission/5b41f372-bb7e-4f08-b251-3f87b1b5260f
+PUT {{host}}/permission/2ce10033-b4ac-4e37-9a40-a23184f8e8af
 Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
-    "last_vacation_from": "2021-05-12",
-    "last_vacation_to": "2021-05-12",
-    "vacation_from_date": "2021-05-12",
-    "vacation_to_date": "2021-05-12",
-    "has_vacation_day": false,
-    "days_quantity": 0,
-    "observations": "Esta es una observación",
-    "person_server": {
-      "uuid": "F34DBCD1-E61A-42E7-9D8C-965E4B5EA086"
-    }
+    "statusBossOne": "Aceptada",
+    "StatusBossTwo": "Aceptada",
+    "reason": "No se",
+    "status": "Aceptada"
 }

@@ -23,6 +23,9 @@ type IPermissionStorage interface {
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
 	GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetPermissionsBossTwo(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error)
 }
 
 func (*repoPermission) Create(ctx context.Context, request models.Permission) (models.Permission, error) {
@@ -77,7 +80,7 @@ func (*repoPermission) GetPermissions(ctx context.Context, query string, argsQue
 func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {
 	request := models.Permission{}
 
-	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive FROM permission where uuid = ?`
+	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive, statusBossOne, StatusBossTwo, reason, status FROM permission where uuid = ?`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&request.Uuid,
@@ -87,6 +90,10 @@ func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (model
 		&request.BossOne,
 		&request.BossTwo,
 		&request.Motive,
+		&request.StatusBossOne,
+		&request.StatusBossTwo,
+		&request.Reason,
+		&request.Status,
 	)
 
 	if err == sql.ErrNoRows {
@@ -104,23 +111,19 @@ func (*repoPermission) UpdatePermission(ctx context.Context, request models.Perm
 	query := `
 	UPDATE permission
 	SET
-		modifiedAt = ?,
-		lastYearVacation = ?,
-		vacationYearRequest = ?,
-		lastVacationFrom = ?,
-		lastVacationTo = ?,
-		vacationFromDate = ?,
-		vacationToDate = ?,
-		hasVacationDay = ?,
-		daysQuantity = ?,
-		observations = ?,
-		publicServer_uuid = ?
+		statusBossOne = ?,
+		StatusBossTwo = ?,
+		reason = ?,
+		status = ?
 		WHERE uuid = ?;
 	`
 	_, err := db.QueryContext(
 		ctx,
 		query,
-
+		request.StatusBossOne,
+		request.StatusBossTwo,
+		request.Reason,
+		request.Status,
 		uuid,
 	)
 
@@ -196,7 +199,9 @@ func (*repoPermission) GetBosssesTwo(ctx context.Context) ([]models.Person, erro
 func (*repoPermission) GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid where r.bossOne = (Select uuid from user u where u.uuidPerson = ?);`
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid 
+				WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
+				AND r.statusBossOne LIKE 'En Espera';`
 
 	rows, err := db.QueryContext(ctx, query, uuid)
 	if err != nil {
@@ -205,6 +210,76 @@ func (*repoPermission) GetPermissionsBossOne(ctx context.Context, uuid string) (
 
 	for rows.Next() {
 		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Person.Fullname)
+		if err != nil {
+			return permissions, err
+		}
+
+		permissions = append(permissions, permission)
+	}
+	return permissions, nil
+}
+
+func (*repoPermission) GetPermissionsBossTwo(ctx context.Context, uuid string) ([]models.Permission, error) {
+	permission := models.Permission{}
+	permissions := []models.Permission{}
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname FROM permission r INNER JOIN person p ON r.uuidPerson = p.uuid 
+				WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
+				AND r.statusBossOne LIKE 'Aceptada'
+				AND r.StatusBossTwo LIKE 'En Espera';`
+
+	rows, err := db.QueryContext(ctx, query, uuid)
+	if err != nil {
+		return permissions, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Person.Fullname)
+		if err != nil {
+			return permissions, err
+		}
+
+		permissions = append(permissions, permission)
+	}
+	return permissions, nil
+}
+
+func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error) {
+	permission := models.Permission{}
+	permissions := []models.Permission{}
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status FROM permission r 
+				WHERE r.uuidPerson = ?
+				AND r.status LIKE 'En Espera';`
+
+	rows, err := db.QueryContext(ctx, query, uuid)
+	if err != nil {
+		return permissions, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.StatusBossOne, &permission.StatusBossTwo, &permission.Status)
+		if err != nil {
+			return permissions, err
+		}
+
+		permissions = append(permissions, permission)
+	}
+	return permissions, nil
+}
+
+func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error) {
+	permission := models.Permission{}
+	permissions := []models.Permission{}
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status FROM permission r 
+				WHERE r.uuidPerson = ? 
+				AND r.status NOT LIKE 'En Espera';`
+
+	rows, err := db.QueryContext(ctx, query, uuid)
+	if err != nil {
+		return permissions, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Status)
 		if err != nil {
 			return permissions, err
 		}

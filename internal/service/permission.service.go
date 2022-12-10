@@ -28,6 +28,9 @@ type IPermissionService interface {
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
 	GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetPermissionsBossTwo(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error)
+	GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error)
 }
 
 func (r *permissionService) Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error) {
@@ -87,4 +90,16 @@ func (*permissionService) GetBosssesTwo(ctx context.Context) ([]models.Person, e
 
 func (*permissionService) GetPermissionsBossOne(ctx context.Context, uuid string) ([]models.Permission, error) {
 	return IPermission.GetPermissionsBossOne(ctx, uuid)
+}
+
+func (*permissionService) GetPermissionsBossTwo(ctx context.Context, uuid string) ([]models.Permission, error) {
+	return IPermission.GetPermissionsBossTwo(ctx, uuid)
+}
+
+func (*permissionService) GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error) {
+	return IPermission.GetUserPermissionsActives(ctx, uuid)
+}
+
+func (*permissionService) GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error) {
+	return IPermission.GetUserPermissions(ctx, uuid)
 }
