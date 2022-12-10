@@ -38,7 +38,7 @@ GET {{host}}/permission/table/bossone/9fa7476a-a00a-45e1-ae26-17bb4114c521
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-GET {{host}}/permission/table/bosstwo/01766969-21e5-4ea2-b392-f410508deae0
+GET {{host}}/permission/table/bosstwo/c6b295c3-dc12-41f9-b45c-76c609bbd23e
 Authorization: Bearer {{login.response.body.token}}
 
 ###

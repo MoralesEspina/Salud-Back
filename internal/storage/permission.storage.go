@@ -223,7 +223,7 @@ func (*repoPermission) GetPermissionsBossTwo(ctx context.Context, uuid string) (
 	permission := models.Permission{}
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, p.fullname as applicant, r.permissionDate, pe.fullname as bossOne from permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid
-				WHERE r.bossTwo = ? 
+				WHERE r.bossTwo = (Select uuid from user u where u.uuidPerson = ?) 
 				AND r.statusBossOne LIKE 'Aceptada'
 				AND r.StatusBossTwo LIKE 'En Espera';`
 
