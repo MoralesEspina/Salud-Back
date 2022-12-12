@@ -250,7 +250,7 @@ func (*repoPermission) GetPermissionsBossTwo(ctx context.Context, uuid string) (
 func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid JOIN user us ON r.bossTwo = us.uuid
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.statusBossOne, r.StatusBossTwo, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN user u ON r.bossOne = u.uuid JOIN person p ON u.uuidPerson = p.uuid JOIN user us ON r.bossTwo = us.uuid JOIN person pe ON us.uuidPerson = pe.uuid 
 				WHERE r.uuidPerson = ?
 				AND r.status LIKE 'En Espera'
 				ORDER BY r.submittedAt ASC;`
@@ -274,8 +274,8 @@ func (*repoPermission) GetUserPermissionsActives(ctx context.Context, uuid strin
 func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN person p ON r.uuidPerson = p.uuid JOIN user u ON r.bossOne = u.uuid JOIN person pe ON u.uuidPerson = pe.uuid JOIN user us ON r.bossTwo = us.uuid
-				WHERE r.uuidPerson = ?
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN user u ON r.bossOne = u.uuid JOIN person p ON u.uuidPerson = p.uuid JOIN user us ON r.bossTwo = us.uuid JOIN person pe ON us.uuidPerson = pe.uuid 
+				WHERE r.uuidPerson = '9fa7476a-a00a-45e1-ae26-17bb4114c521'
 				AND r.status NOT LIKE 'En Espera'
 				ORDER BY r.submittedAt ASC;`
 
