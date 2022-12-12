@@ -82,6 +82,7 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 	}
 
 	user.Password = ""
+	response.ID = user.ID
 	response.Username = user.Username
 	response.Rol = user.Rol
 
