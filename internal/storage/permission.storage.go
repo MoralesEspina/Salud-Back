@@ -275,7 +275,7 @@ func (*repoPermission) GetUserPermissions(ctx context.Context, uuid string) ([]m
 	permission := models.Permission{}
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, r.status, p.fullname as bossOne, pe.fullname as bossTwo FROM permission r JOIN user u ON r.bossOne = u.uuid JOIN person p ON u.uuidPerson = p.uuid JOIN user us ON r.bossTwo = us.uuid JOIN person pe ON us.uuidPerson = pe.uuid 
-				WHERE r.uuidPerson = '9fa7476a-a00a-45e1-ae26-17bb4114c521'
+				WHERE r.uuidPerson = ?
 				AND r.status NOT LIKE 'En Espera'
 				ORDER BY r.submittedAt ASC;`
 
