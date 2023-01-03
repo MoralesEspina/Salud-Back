@@ -30,6 +30,8 @@ type UserStorage interface {
 	Login(ctx context.Context, user *models.User) (models.User, error)
 	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	GetManyUsers(ctx context.Context) ([]models.User, error)
+	GetManyEmployees(ctx context.Context) ([]models.User, error)
+	GetManyBosses(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
 	DeleteUser(ctx context.Context, uuid string) (string, error)
 
@@ -142,7 +144,60 @@ func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {
 	users := []models.User{}
 
 	query := `SELECT u.uuid, u.username, r.role FROM user u 
-			  INNER JOIN rol r ON u.rol_id = r.id;`
+			  INNER JOIN rol r ON u.rol_id = r.id
+			  Where u.rol_id IN (1,2);`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err == sql.ErrNoRows {
+		return users, lib.ErrNotFound
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol)
+
+		if err != nil {
+			return users, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (*repoUser) GetManyEmployees(ctx context.Context) ([]models.User, error) {
+	user := models.User{}
+	users := []models.User{}
+
+	query := `SELECT u.uuid, u.username, r.role FROM user u 
+			  INNER JOIN rol r ON u.rol_id = r.id
+			  Where u.rol_id = 3;`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err == sql.ErrNoRows {
+		return users, lib.ErrNotFound
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol)
+
+		if err != nil {
+			return users, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (*repoUser) GetManyBosses(ctx context.Context) ([]models.User, error) {
+	user := models.User{}
+	users := []models.User{}
+
+	query := `SELECT u.uuid, u.username, r.role FROM user u 
+			  INNER JOIN rol r ON u.rol_id = r.id
+			  Where u.rol_id IN (4,6);`
 
 	rows, err := db.QueryContext(ctx, query)
 	if err == sql.ErrNoRows {

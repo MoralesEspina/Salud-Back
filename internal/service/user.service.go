@@ -26,6 +26,8 @@ type UserService interface {
 	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	Update(ctx context.Context, uuid string, user *models.User) (string, error)
 	ManyUsers(ctx context.Context) ([]models.User, error)
+	ManyEmployees(ctx context.Context) ([]models.User, error)
+	ManyBosses(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
 	ChangePassword(ctx context.Context, uuidUser, actualPassword, newPassword string) error
 	DeleteUser(ctx context.Context, uuid string) (string, error)
@@ -55,6 +57,14 @@ func (*userService) GetOneUser(ctx context.Context, uuid string) (models.User, e
 
 func (*userService) ManyUsers(ctx context.Context) ([]models.User, error) {
 	return Userstorage.GetManyUsers(ctx)
+}
+
+func (*userService) ManyEmployees(ctx context.Context) ([]models.User, error) {
+	return Userstorage.GetManyEmployees(ctx)
+}
+
+func (*userService) ManyBosses(ctx context.Context) ([]models.User, error) {
+	return Userstorage.GetManyBosses(ctx)
 }
 
 func (*userService) Roles(ctx context.Context) ([]models.Rol, error) {
