@@ -19,23 +19,34 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"74865137",
-    "password":"Salud7486-1"
+    "username":"segundaprueba",
+    "password":"admin"
 }
 
 ###
 
-PUT {{host}}/users/a00cfe0c-1cc1-4aff-9513-3034ee63e54a
+PUT {{host}}/users/c1a683ff-100d-4500-af3b-01921e7bbe31
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "id_rol" : 3,
-    "username": "PruebaTobar"
+    "id_rol" : 1,
+    "username": "Prueba",
+    "password":"admin"
 }
 
 ###
 GET {{host}}/users
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/users/employees
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/users/bosses
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 

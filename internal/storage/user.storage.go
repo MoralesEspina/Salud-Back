@@ -96,9 +96,14 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 }
 
 func (*repoUser) Update(ctx context.Context, uuid string, user *models.User) (string, error) {
-	query := "UPDATE user SET rol_id=?, username=? WHERE uuid = ?;"
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
 
-	_, err := db.QueryContext(ctx, query, user.IDRol, user.Username, uuid)
+	query := "UPDATE user SET rol_id=?, username=?, password=? WHERE uuid = ?;"
+
+	_, err = db.QueryContext(ctx, query, user.IDRol, user.Username, string(hashedPassword), uuid)
 
 	if err != nil {
 		println(user.IDRol, user.Username)
