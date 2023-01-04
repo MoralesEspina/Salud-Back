@@ -41,6 +41,11 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
+GET {{host}}/users/admins
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
 GET {{host}}/users/employees
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
