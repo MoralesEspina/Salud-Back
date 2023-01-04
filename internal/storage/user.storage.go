@@ -32,6 +32,7 @@ type UserStorage interface {
 	GetManyUsers(ctx context.Context) ([]models.User, error)
 	GetManyEmployees(ctx context.Context) ([]models.User, error)
 	GetManyBosses(ctx context.Context) ([]models.User, error)
+	GetManyAdminsAndMembers(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
 	DeleteUser(ctx context.Context, uuid string) (string, error)
 
@@ -145,6 +146,31 @@ func (*repoUser) GetOneUser(ctx context.Context, uuid string) (models.User, erro
 }
 
 func (*repoUser) GetManyUsers(ctx context.Context) ([]models.User, error) {
+	user := models.User{}
+	users := []models.User{}
+
+	query := `SELECT u.uuid, u.username, r.role FROM user u 
+			  INNER JOIN rol r ON u.rol_id = r.id;`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err == sql.ErrNoRows {
+		return users, lib.ErrNotFound
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol)
+
+		if err != nil {
+			return users, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (*repoUser) GetManyAdminsAndMembers(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
 

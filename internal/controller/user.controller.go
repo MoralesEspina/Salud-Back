@@ -28,6 +28,7 @@ type UserController interface {
 	Update(w http.ResponseWriter, r *http.Request)
 	GetOneUser(w http.ResponseWriter, r *http.Request)
 	ManyUsers(w http.ResponseWriter, r *http.Request)
+	ManyAdminsAndMembers(w http.ResponseWriter, r *http.Request)
 	ManyEmployees(w http.ResponseWriter, r *http.Request)
 	ManyBosses(w http.ResponseWriter, r *http.Request)
 	Rols(w http.ResponseWriter, r *http.Request)
@@ -268,6 +269,31 @@ func (*userController) ManyUsers(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func (*userController) ManyAdminsAndMembers(w http.ResponseWriter, r *http.Request) {
+	var users []models.User
+	data, err := userService.ManyAdminsAndMembers(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:   false,
+			Data: users,
+		}, http.StatusNotFound)
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
 func (*userController) ManyEmployees(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	data, err := userService.ManyEmployees(r.Context())

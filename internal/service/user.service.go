@@ -26,6 +26,7 @@ type UserService interface {
 	GetOneUser(ctx context.Context, uuid string) (models.User, error)
 	Update(ctx context.Context, uuid string, user *models.User) (string, error)
 	ManyUsers(ctx context.Context) ([]models.User, error)
+	ManyAdminsAndMembers(ctx context.Context) ([]models.User, error)
 	ManyEmployees(ctx context.Context) ([]models.User, error)
 	ManyBosses(ctx context.Context) ([]models.User, error)
 	Roles(ctx context.Context) ([]models.Rol, error)
@@ -57,6 +58,10 @@ func (*userService) GetOneUser(ctx context.Context, uuid string) (models.User, e
 
 func (*userService) ManyUsers(ctx context.Context) ([]models.User, error) {
 	return Userstorage.GetManyUsers(ctx)
+}
+
+func (*userService) ManyAdminsAndMembers(ctx context.Context) ([]models.User, error) {
+	return Userstorage.GetManyAdminsAndMembers(ctx)
 }
 
 func (*userService) ManyEmployees(ctx context.Context) ([]models.User, error) {
