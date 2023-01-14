@@ -125,24 +125,28 @@ func (*repoCurriculum) GetOne(ctx context.Context, uuid string) (models.Curricul
 
 func (*repoCurriculum) Update(ctx context.Context, uuid string, curriculum models.Curriculum) (string, error) {
 
-	query := `UPDATE curriculum SET 
-					direction = ?, 
-					country = ?, 
-					homePhone = ?, 
-					bornPlace = ?, 
-					nacionality = ?, 
-					municipality = ?, 
-					village = ?, 
-					workPhone = ?, 
-					age = ?,
-					civilStatus = ?,
-					etnia = ?,
-					passport = ?,
-					license = ?,
-					department = ?,
-					igss = ? `
-
-	query += " WHERE uuidPerson = ?;"
+	query := `UPDATE curriculum,person SET 
+					curriculum.direction = ?, 
+					curriculum.country = ?, 
+					curriculum.homePhone = ?, 
+					curriculum.bornPlace = ?, 
+					curriculum.nacionality = ?, 
+					curriculum.municipality = ?, 
+					curriculum.village = ?, 
+					curriculum.workPhone = ?, 
+					curriculum.age = ?,
+					curriculum.civilStatus = ?,
+					curriculum.etnia = ?,
+					curriculum.passport = ?,
+					curriculum.license = ?,
+					curriculum.department = ?,
+					curriculum.igss = ?,
+					person.phone = ?, 
+					person.email = ?, 
+					person.dpi = ?, 
+					person.nit = ?, 
+					person.bornDate = ?  `
+	query += " WHERE curriculum.uuidPerson = ? AND person.uuid = ?;"
 
 	_, err := db.QueryContext(
 		ctx,
@@ -162,6 +166,12 @@ func (*repoCurriculum) Update(ctx context.Context, uuid string, curriculum model
 		curriculum.License,
 		curriculum.Department,
 		curriculum.IGSS,
+		curriculum.Person.Phone,
+		curriculum.Person.Email,
+		curriculum.Person.DPI,
+		curriculum.Person.NIT,
+		curriculum.Person.BornDate,
+		uuid,
 		uuid,
 	)
 

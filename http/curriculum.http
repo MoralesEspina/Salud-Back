@@ -38,7 +38,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-PUT {{host}}/curriculums/18214f84-f835-4cd0-a2ef-717c9429de08
+PUT {{host}}/curriculums/9fa7476a-a00a-45e1-ae26-17bb4114c521
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
@@ -55,7 +55,26 @@ Authorization: Bearer {{login.response.body.token}}
     "civilStatus":"Soltero",
     "etnia":"Ladino",
     "passport":"654321",
-    "license":"321"
+    "license":"321",
+    "phone": "6704",
+    "email": "@gmail.com",
+    "dpi":"4104",
+    "nit":"4104",
+    "bornDate":"2001-06-12"
+    }
+
+
+###
+PUT {{host}}/curriculums/person/9fa7476a-a00a-45e1-ae26-17bb4114c521
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "phone": "41806704",
+    "email": "Monjas@gmail.com",
+    "dpi":"41806704",
+    "nit":"41806704",
+    "bornDate":"2001-06-17"
     }
 ###
 GET {{host}}/requestvacations/alo/hola
