@@ -57,12 +57,12 @@ func (r *permissionService) GetPermissions(ctx context.Context, uuidUser, role s
 
 	if role == "admin" {
 		query = `
-		SELECT r.uuid, r.submittedAt, p.fullname, r.permissionDate FROM permission r
+		SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status FROM permission r
 		INNER JOIN person p ON r.uuidPerson = p.uuid`
 
 	} else {
 		query = `
-		SELECT r.uuid, r.submittedAt, p.fullname, r.bossOne, r.bossTwo FROM permission r
+		SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status FROM permission r
 		INNER JOIN person p ON r.uuidPerson = p.uuid`
 	}
 

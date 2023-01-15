@@ -53,7 +53,7 @@ Authorization: Bearer {{login.response.body.token}}
     "workPhone":"79220034",
     "age":"19",
     "civilStatus":"Soltero",
-    "etnia":"Ladino",
+    "etnia":"Ladino",   
     "passport":"654321",
     "license":"321",
     "phone": "6704",
