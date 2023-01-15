@@ -66,7 +66,7 @@ func (*repoPermission) GetPermissions(ctx context.Context, query string, argsQue
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&request.Uuid, &request.SubmittedAt, &request.UuidPerson, &request.Reason)
+		err := rows.Scan(&request.Uuid, &request.SubmittedAt, &request.PermissionDate, &request.Person.Fullname, &request.Status)
 		if err != nil {
 			return requests, err
 		}
