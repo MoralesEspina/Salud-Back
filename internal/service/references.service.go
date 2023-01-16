@@ -28,6 +28,8 @@ type ReferencesService interface {
 	CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error)
 	GetRefPer(ctx context.Context, uuid string) ([]models.References, error)
 	GetRefFam(ctx context.Context, uuid string) ([]models.References, error)
+	DeleteRefPer(ctx context.Context, uuid string) (string, error)
+	DeleteRefFam(ctx context.Context, uuid string) (string, error)
 }
 
 func (*referencesService) CreateRefFamiliar(ctx context.Context, references models.References) (models.References, error) {
@@ -42,4 +44,12 @@ func (*referencesService) GetRefPer(ctx context.Context, uuid string) ([]models.
 
 func (*referencesService) GetRefFam(ctx context.Context, uuid string) ([]models.References, error) {
 	return ReferencesStorage.GetRefFam(ctx, uuid)
+}
+
+func (*referencesService) DeleteRefPer(ctx context.Context, uuid string) (string, error) {
+	return ReferencesStorage.DeleteRefPer(ctx, uuid)
+}
+
+func (*referencesService) DeleteRefFam(ctx context.Context, uuid string) (string, error) {
+	return ReferencesStorage.DeleteRefFam(ctx, uuid)
 }
