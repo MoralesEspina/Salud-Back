@@ -21,7 +21,7 @@ func NewPermissionService(IPermissionStorage storage.IPermissionStorage) IPermis
 
 type IPermissionService interface {
 	Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error)
-	GetPermissions(ctx context.Context, uuidUser, role string) ([]models.Permission, error)
+	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
@@ -51,24 +51,8 @@ func (r *permissionService) Create(ctx context.Context, request models.Permissio
 	return IPermission.Create(ctx, request)
 }
 
-func (r *permissionService) GetPermissions(ctx context.Context, uuidUser, role string) ([]models.Permission, error) {
-	args := []interface{}{}
-	var query string
-
-	if role == "admin" {
-		query = `
-		SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status FROM permission r
-		INNER JOIN person p ON r.uuidPerson = p.uuid
-		ORDER BY r.submittedAt DESC`
-
-	} else {
-		query = `
-		SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status FROM permission r
-		INNER JOIN person p ON r.uuidPerson = p.uuid
-		ORDER BY r.submittedAt DESC`
-	}
-
-	return IPermission.GetPermissions(ctx, query, args)
+func (r *permissionService) GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error) {
+	return IPermission.GetPermissions(ctx, startDate, endDate)
 }
 
 func (r *permissionService) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {

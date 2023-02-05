@@ -80,13 +80,15 @@ func (*permissionController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (*permissionController) GetPermissions(w http.ResponseWriter, r *http.Request) {
-	tokenInfo, ok := middleware.IsAuthenticated(r.Context())
+	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
 		return
 	}
 
-	data, err := IPermissionService.GetPermissions(r.Context(), tokenInfo.ID, tokenInfo.Rol)
+	startDate := lib.ValuesURL(r, "startdate")
+	endDate := lib.ValuesURL(r, "enddate")
+	data, err := IPermissionService.GetPermissions(r.Context(), startDate, endDate)
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
