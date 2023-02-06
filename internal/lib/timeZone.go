@@ -33,7 +33,7 @@ func TimeZone(region string) TimeInfo {
 		Minute:     now.Minute(),
 		Second:     now.Second(),
 		Milisecond: int64(now.Nanosecond()),
-		DateTime:   fmt.Sprintf("%d-%d-%d %d:%d:%d", year, month, day, now.Hour(), now.Minute(), now.Second()),
+		DateTime:   fmt.Sprintf("%d-%d-%d %d:%d:%d", year, month, now.Day(), now.Hour(), now.Minute(), now.Second()),
 	}
 
 }
