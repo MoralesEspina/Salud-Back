@@ -19,14 +19,15 @@ Content-Type: application/json
 {
     "permissionDate": "2022-05-05",
     "uuidPerson": "9fa7476a-a00a-45e1-ae26-17bb4114c521",
-    "bossOne": "0a26d6e1-6062-46ad-8781-070205fd6e45",
-    "bossTwo": "0eed4e8f-bee8-45e6-a704-9f5998172ec9",
+    "bossOne": "01766969-21e5-4ea2-b392-f410508deae0",
+    "bossTwo": "01766969-21e5-4ea2-b392-f410508deae0",
     "motive": "Asueto por cumpleaños",
-    "status": ""
+    "document": "hola"
 }
 
+
 ###
-GET {{host}}/permission
+GET {{host}}/permission?startdate=2021/02/05&enddate=2023/02/27
 Authorization: Bearer {{login.response.body.token}}
 
 ###
@@ -54,7 +55,7 @@ GET {{host}}/permission/information/bosstwo
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-GET {{host}}/permission/c1dbe6e2-1be4-45da-a8ae-47869408f1f9
+GET {{host}}/permission/9cf85134-489c-48d4-bfd5-1c2583e76634
 Authorization: Bearer {{login.response.body.token}}
 
 ###

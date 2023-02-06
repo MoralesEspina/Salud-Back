@@ -29,7 +29,7 @@ type IPermissionStorage interface {
 }
 
 func (*repoPermission) Create(ctx context.Context, request models.Permission) (models.Permission, error) {
-	query := "INSERT INTO permission VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO permission VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	_, err := db.QueryContext(
 		ctx,
@@ -47,6 +47,7 @@ func (*repoPermission) Create(ctx context.Context, request models.Permission) (m
 		request.StatusBossTwo,
 		request.Status,
 		request.Reason,
+		request.Document,
 	)
 
 	if err != nil {
@@ -84,7 +85,7 @@ func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate st
 func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {
 	request := models.Permission{}
 
-	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive, statusBossOne, StatusBossTwo, reason, status FROM permission where uuid = ?`
+	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive, statusBossOne, StatusBossTwo, reason, status, document FROM permission where uuid = ?`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&request.Uuid,
@@ -98,6 +99,7 @@ func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (model
 		&request.StatusBossTwo,
 		&request.Reason,
 		&request.Status,
+		&request.Document,
 	)
 
 	if err == sql.ErrNoRows {
