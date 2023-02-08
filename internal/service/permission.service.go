@@ -23,6 +23,7 @@ type IPermissionService interface {
 	Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error)
 	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
+	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
@@ -47,6 +48,7 @@ func (r *permissionService) Create(ctx context.Context, request models.Permissio
 	request.StatusBossOne = "En Espera"
 	request.StatusBossTwo = "En Espera"
 	request.Status = "En Espera"
+	request.Reason = "-"
 
 	return IPermission.Create(ctx, request)
 }
@@ -57,6 +59,10 @@ func (r *permissionService) GetPermissions(ctx context.Context, startDate, endDa
 
 func (r *permissionService) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {
 	return IPermission.GetOnePermission(ctx, uuid)
+}
+
+func (r *permissionService) GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error) {
+	return IPermission.GetOnePermissionWithName(ctx, uuid)
 }
 
 func (r *permissionService) UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error) {

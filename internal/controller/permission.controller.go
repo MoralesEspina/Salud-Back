@@ -24,6 +24,7 @@ type IPermissionController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetPermissions(w http.ResponseWriter, r *http.Request)
 	GetOnePermission(w http.ResponseWriter, r *http.Request)
+	GetOnePermissionWithName(w http.ResponseWriter, r *http.Request)
 	UpdatePermission(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
 	GetBosssesOne(w http.ResponseWriter, r *http.Request)
@@ -124,6 +125,41 @@ func (*permissionController) GetOnePermission(w http.ResponseWriter, r *http.Req
 	vars := mux.Vars(r)
 
 	data, err := IPermissionService.GetOnePermission(r.Context(), vars["uuid"])
+	if err == lib.ErrSQL404 {
+		respond(w, response{
+			Ok:      false,
+			Data:    emptyArray,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetOnePermissionWithName(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+
+	data, err := IPermissionService.GetOnePermissionWithName(r.Context(), vars["uuid"])
 	if err == lib.ErrSQL404 {
 		respond(w, response{
 			Ok:      false,

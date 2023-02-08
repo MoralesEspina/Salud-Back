@@ -34,6 +34,7 @@ func SetCurriculumRoutes(router *mux.Router) {
 	curriculum.Handle("", middleware.AuthForAmdminTypeHTTP(curriculumController.Create)).Methods("POST")
 	curriculum.HandleFunc("/{uuid}", curriculumController.GetOne).Methods("GET")
 	curriculum.HandleFunc("/{uuid}", curriculumController.Update).Methods("PUT")
+	curriculum.HandleFunc("/{uuid}", curriculumController.Delete).Methods("DELETE")
 
 	references := router.PathPrefix("/references").Subrouter()
 	// person.Use(middleware.AuthForAmdmin)

@@ -28,6 +28,7 @@ type CurriculumController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetOne(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
 }
 
 func (*curriculumController) Create(w http.ResponseWriter, r *http.Request) {
@@ -136,6 +137,34 @@ func (*curriculumController) Update(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*curriculumController) Delete(w http.ResponseWriter, r *http.Request) {
+	uuid := mux.Vars(r)["uuid"]
+	_, err := ICurriculumService.DeleteCurriculum(r.Context(), uuid)
+	if err != nil {
+		if err == lib.ErrNotFound {
+			respond(w, response{
+				Ok:      false,
+				Data:    emptyArray,
+				Message: lib.ErrNotFound.Error(),
+			}, http.StatusNotFound)
+			return
+		}
+
+		respondError(w, err)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: uuid,
+		}, http.StatusOK)
 		return
 	}
 

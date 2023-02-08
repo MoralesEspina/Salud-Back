@@ -152,3 +152,8 @@ Authorization: Bearer {{login.response.body.token}}
 GET {{host}}/workExp/18214f84-f835-4cd0-a2ef-717c9429de08
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
+
+###
+DELETE  {{host}}/curriculums/00796894-c5b8-437d-b7b8-fbbda0419469
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}

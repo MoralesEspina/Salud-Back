@@ -28,6 +28,7 @@ type CurriculumService interface {
 	Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error)
 	GetOne(ctx context.Context, uuid string) (models.Curriculum, error)
 	Update(ctx context.Context, uuid string, curriculum models.Curriculum) (string, error)
+	DeleteCurriculum(ctx context.Context, uuid string) (string, error)
 }
 
 func (*curriculumService) Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error) {
@@ -42,4 +43,8 @@ func (*curriculumService) GetOne(ctx context.Context, uuid string) (models.Curri
 
 func (*curriculumService) Update(ctx context.Context, uuid string, curriculum models.Curriculum) (string, error) {
 	return CurriculumStorage.Update(ctx, uuid, curriculum)
+}
+
+func (*curriculumService) DeleteCurriculum(ctx context.Context, uuid string) (string, error) {
+	return CurriculumStorage.DeleteCurriculum(ctx, uuid)
 }

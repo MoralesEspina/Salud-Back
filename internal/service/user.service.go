@@ -34,6 +34,8 @@ type UserService interface {
 	DeleteUser(ctx context.Context, uuid string) (string, error)
 
 	UserInformationByToken(ctx context.Context, uuid string) (models.User, error)
+
+	GetNamePersonForUsers(ctx context.Context) ([]models.Person, error)
 }
 
 // UserCreate es el servicio de conexion al storage de crear usuario
@@ -86,4 +88,8 @@ func (*userService) DeleteUser(ctx context.Context, uuid string) (string, error)
 
 func (*userService) UserInformationByToken(ctx context.Context, uuid string) (models.User, error) {
 	return Userstorage.UserInformationByToken(ctx, uuid)
+}
+
+func (*userService) GetNamePersonForUsers(ctx context.Context) ([]models.Person, error) {
+	return Userstorage.GetNamePersonForUsers(ctx)
 }

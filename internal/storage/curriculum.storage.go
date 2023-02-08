@@ -20,6 +20,7 @@ type CurriculumStorage interface {
 	Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error)
 	GetOne(ctx context.Context, uuid string) (models.Curriculum, error)
 	Update(ctx context.Context, uuid string, curriculum models.Curriculum) (string, error)
+	DeleteCurriculum(ctx context.Context, uuid string) (string, error)
 }
 
 func (*repoCurriculum) Create(ctx context.Context, curriculum models.Curriculum) (models.Curriculum, error) {
@@ -180,4 +181,20 @@ func (*repoCurriculum) Update(ctx context.Context, uuid string, curriculum model
 	}
 
 	return string(curriculum.UUID), nil
+}
+
+func (*repoCurriculum) DeleteCurriculum(ctx context.Context, uuid string) (string, error) {
+	queryUpdate := "DELETE FROM curriculum WHERE uuidPerson = ?;"
+
+	rows, err := db.ExecContext(ctx, queryUpdate, uuid)
+	if err != nil {
+		return "", err
+	}
+
+	resultDelete, _ := rows.RowsAffected()
+	if resultDelete == 0 {
+		return "", lib.ErrNotFound
+	}
+
+	return uuid, nil
 }

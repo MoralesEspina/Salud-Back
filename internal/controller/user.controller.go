@@ -35,6 +35,7 @@ type UserController interface {
 	ChangePassword(w http.ResponseWriter, r *http.Request)
 	DeleteUser(w http.ResponseWriter, r *http.Request)
 	UserInformationByToken(w http.ResponseWriter, r *http.Request)
+	GetNamePersonForUsers(w http.ResponseWriter, r *http.Request)
 }
 
 func (*userController) Create(w http.ResponseWriter, r *http.Request) {
@@ -434,6 +435,39 @@ func (*userController) DeleteUser(w http.ResponseWriter, r *http.Request) {
 			Ok:   true,
 			Data: uuid,
 		}, http.StatusOK)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*userController) GetNamePersonForUsers(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	data, err := userService.GetNamePersonForUsers(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
 		return
 	}
 

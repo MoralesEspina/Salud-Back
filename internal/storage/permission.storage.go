@@ -18,6 +18,7 @@ type IPermissionStorage interface {
 	Create(ctx context.Context, Permission models.Permission) (models.Permission, error)
 	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
+	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
@@ -85,7 +86,7 @@ func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate st
 func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {
 	request := models.Permission{}
 
-	query := `SELECT uuid, submittedAt, permissionDate, uuidPerson, bossOne, bossTwo, motive, statusBossOne, StatusBossTwo, reason, status, document FROM permission where uuid = ?`
+	query := `SELECT p.uuid, p.submittedAt, p.permissionDate, p.uuidPerson, p.bossOne, p.bossTwo, p.motive, p.statusBossOne, p.StatusBossTwo, p.status, p.reason, p.document FROM permission as p where uuid = ?`
 
 	err := db.QueryRowContext(ctx, query, uuid).Scan(
 		&request.Uuid,
@@ -97,8 +98,41 @@ func (*repoPermission) GetOnePermission(ctx context.Context, uuid string) (model
 		&request.Motive,
 		&request.StatusBossOne,
 		&request.StatusBossTwo,
-		&request.Reason,
 		&request.Status,
+		&request.Reason,
+		&request.Document,
+	)
+
+	if err == sql.ErrNoRows {
+		return request, lib.ErrSQL404
+	}
+	if err != nil {
+		return request, err
+	}
+
+	return request, nil
+}
+
+func (*repoPermission) GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error) {
+	request := models.Permission{}
+
+	query := `SELECT p.uuid, p.submittedAt, p.permissionDate, p.uuidPerson, r.fullname as bossOne, re.fullname as bossTwo, p.motive, p.statusBossOne, 
+				p.StatusBossTwo, p.status, p.reason, p.document FROM permission as p JOIN user u ON p.bossOne = u.uuid JOIN person r ON u.uuidPerson = r.uuid 
+				JOIN user us ON p.bossTwo = us.uuid JOIN person re ON us.uuidPerson = re.uuid 
+				where p.uuid = ?`
+
+	err := db.QueryRowContext(ctx, query, uuid).Scan(
+		&request.Uuid,
+		&request.SubmittedAt,
+		&request.PermissionDate,
+		&request.UuidPerson,
+		&request.BossOne,
+		&request.BossTwo,
+		&request.Motive,
+		&request.StatusBossOne,
+		&request.StatusBossTwo,
+		&request.Status,
+		&request.Reason,
 		&request.Document,
 	)
 

@@ -39,6 +39,7 @@ type UserStorage interface {
 	ChangePassword(ctx context.Context, uuidUser, actualPassword, newPassword string) error
 
 	UserInformationByToken(ctx context.Context, uuid string) (models.User, error)
+	GetNamePersonForUsers(ctx context.Context) ([]models.Person, error)
 }
 
 func (*repoUser) Create(ctx context.Context, user *models.User) (string, error) {
@@ -50,7 +51,7 @@ func (*repoUser) Create(ctx context.Context, user *models.User) (string, error) 
 	}
 
 	query := "INSERT INTO user (uuid, username, password, rol_id, uuidPerson) values (?, ?, ?, ?, ?);"
-	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol, user.Person)
+	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol, user.UuidPerson)
 
 	if err != nil {
 		log.Println(err)
@@ -68,7 +69,7 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 	query += "INNER JOIN rol r ON u.rol_id = r.id "
 	query += "WHERE binary username = ?;"
 
-	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol, &user.Person)
+	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol, &user.UuidPerson)
 
 	if row == sql.ErrNoRows {
 		return response, lib.ErrUserNotFound
@@ -200,7 +201,7 @@ func (*repoUser) GetManyEmployees(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
 
-	query := `SELECT u.uuid, u.username, r.role, p.fullname FROM user u 
+	query := `SELECT u.uuid, u.username, r.role, p.fullname, p.uuid as uuidPerson FROM user u 
 			  INNER JOIN rol r ON u.rol_id = r.id
 			  INNER JOIN person p ON u.uuidPerson = p.uuid
 			  Where u.rol_id = 3;`
@@ -211,7 +212,7 @@ func (*repoUser) GetManyEmployees(ctx context.Context) ([]models.User, error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person)
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person, &user.UuidPerson)
 
 		if err != nil {
 			return users, err
@@ -227,7 +228,7 @@ func (*repoUser) GetManyBosses(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
 
-	query := `SELECT u.uuid, u.username, r.role, p.fullname FROM user u 
+	query := `SELECT u.uuid, u.username, r.role, p.fullname, p.uuid as uuidPerson FROM user u 
 				INNER JOIN rol r ON u.rol_id = r.id
 				INNER JOIN person p ON u.uuidPerson = p.uuid
 				Where u.rol_id IN (4,6);`
@@ -238,7 +239,7 @@ func (*repoUser) GetManyBosses(ctx context.Context) ([]models.User, error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person)
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person, &user.UuidPerson)
 
 		if err != nil {
 			return users, err
@@ -345,4 +346,25 @@ func (*repoUser) DeleteUser(ctx context.Context, uuid string) (string, error) {
 	}
 
 	return uuid, nil
+}
+
+func (*repoUser) GetNamePersonForUsers(ctx context.Context) ([]models.Person, error) {
+	person := models.Person{}
+	persons := []models.Person{}
+	query := "SELECT uuid, fullname FROM person WHERE isPublicServer is false AND uuid NOT IN (SELECT uuidPerson FROM user);"
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return persons, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&person.UUID, &person.Fullname)
+		if err != nil {
+			return persons, err
+		}
+
+		persons = append(persons, person)
+	}
+	return persons, nil
 }
