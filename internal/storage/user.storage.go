@@ -51,7 +51,7 @@ func (*repoUser) Create(ctx context.Context, user *models.User) (string, error) 
 	}
 
 	query := "INSERT INTO user (uuid, username, password, rol_id, uuidPerson) values (?, ?, ?, ?, ?);"
-	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol, user.UuidPerson)
+	_, err = db.QueryContext(ctx, query, user.ID, user.Username, string(hashedPassword), user.IDRol, user.Person)
 
 	if err != nil {
 		log.Println(err)
@@ -69,7 +69,7 @@ func (*repoUser) Login(ctx context.Context, user *models.User) (models.User, err
 	query += "INNER JOIN rol r ON u.rol_id = r.id "
 	query += "WHERE binary username = ?;"
 
-	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol, &user.UuidPerson)
+	row := db.QueryRowContext(ctx, query, user.Username).Scan(&user.ID, &user.Username, &passwordClient, &user.Rol, &user.Person)
 
 	if row == sql.ErrNoRows {
 		return response, lib.ErrUserNotFound
@@ -212,7 +212,7 @@ func (*repoUser) GetManyEmployees(ctx context.Context) ([]models.User, error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person, &user.UuidPerson)
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Fullname, &user.Person)
 
 		if err != nil {
 			return users, err
@@ -239,7 +239,7 @@ func (*repoUser) GetManyBosses(ctx context.Context) ([]models.User, error) {
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Person, &user.UuidPerson)
+		err := rows.Scan(&user.ID, &user.Username, &user.Rol, &user.Fullname, &user.Person)
 
 		if err != nil {
 			return users, err
