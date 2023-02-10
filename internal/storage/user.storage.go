@@ -200,7 +200,6 @@ func (*repoUser) GetManyAdminsAndMembers(ctx context.Context) ([]models.User, er
 func (*repoUser) GetManyEmployees(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
-
 	query := `SELECT u.uuid, u.username, r.role, p.fullname, p.uuid as uuidPerson FROM user u 
 			  INNER JOIN rol r ON u.rol_id = r.id
 			  INNER JOIN person p ON u.uuidPerson = p.uuid
@@ -228,7 +227,7 @@ func (*repoUser) GetManyBosses(ctx context.Context) ([]models.User, error) {
 	user := models.User{}
 	users := []models.User{}
 
-	query := `SELECT u.uuid, u.username, r.role, p.fullname, p.uuid as uuidPerson FROM user u 
+	query := `	SELECT u.uuid, u.username, r.role, p.fullname, p.uuid as uuidPerson FROM user u 
 				INNER JOIN rol r ON u.rol_id = r.id
 				INNER JOIN person p ON u.uuidPerson = p.uuid
 				Where u.rol_id IN (4,6);`

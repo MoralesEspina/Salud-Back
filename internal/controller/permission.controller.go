@@ -186,7 +186,7 @@ func (*permissionController) GetOnePermissionWithName(w http.ResponseWriter, r *
 }
 
 func (*permissionController) UpdatePermission(w http.ResponseWriter, r *http.Request) {
-	_, ok := middleware.IsAuthenticated(r.Context())
+	tokenInfo, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
 		return
@@ -203,7 +203,7 @@ func (*permissionController) UpdatePermission(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	result, err := IPermissionService.UpdatePermission(r.Context(), request, mux.Vars(r)["uuid"])
+	result, err := IPermissionService.UpdatePermission(r.Context(), request, mux.Vars(r)["uuid"], tokenInfo.Rol)
 	if err == nil {
 		respond(w, response{
 			Ok:      true,

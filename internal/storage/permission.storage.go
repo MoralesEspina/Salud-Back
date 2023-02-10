@@ -19,7 +19,7 @@ type IPermissionStorage interface {
 	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
-	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
+	UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
@@ -146,8 +146,7 @@ func (*repoPermission) GetOnePermissionWithName(ctx context.Context, uuid string
 	return request, nil
 }
 
-func (*repoPermission) UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error) {
-
+func (*repoPermission) UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error) {
 	query := `
 	UPDATE permission
 	SET

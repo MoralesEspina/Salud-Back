@@ -64,8 +64,5 @@ Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
-    "statusBossOne": "Aceptada",
-    "StatusBossTwo": "Aceptada",
-    "reason": "No se",
-    "status": "Aceptada"
+    "statusBossOne": "Aceptada"
 }

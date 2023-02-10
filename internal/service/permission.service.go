@@ -24,7 +24,7 @@ type IPermissionService interface {
 	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
-	UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error)
+	UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error)
 	DeletePermission(ctx context.Context, uuid string) (string, error)
 	GetBosssesOne(ctx context.Context) ([]models.Person, error)
 	GetBosssesTwo(ctx context.Context) ([]models.Person, error)
@@ -65,11 +65,28 @@ func (r *permissionService) GetOnePermissionWithName(ctx context.Context, uuid s
 	return IPermission.GetOnePermissionWithName(ctx, uuid)
 }
 
-func (r *permissionService) UpdatePermission(ctx context.Context, request models.Permission, uuid string) (string, error) {
+func (r *permissionService) UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error) {
 	time := lib.TimeZone("America/Guatemala")
 	request.ModifiedAt = time.DateTime
-	return IPermission.UpdatePermission(ctx, request, uuid)
+	switch {
+	case request.BossOne == request.BossTwo:
+		request.StatusBossTwo = request.StatusBossOne
+		request.Status = request.StatusBossOne
+	case request.StatusBossOne == "Denegada" && request.StatusBossTwo == "En Espera":
+		request.StatusBossTwo = "En Espera"
+		request.Status = "Denegada"
+	case request.StatusBossOne == "Aceptada" && request.StatusBossTwo == "En Espera":
+		request.StatusBossTwo = "En Espera"
+		request.Status = "En Espera"
+	case request.StatusBossTwo == "Denegada":
+		request.Status = "Denegada"
+	case request.StatusBossTwo == "Aceptada":
+		request.Status = "Aceptada"
+	}
+
+	return IPermission.UpdatePermission(ctx, request, uuid, rol)
 }
+
 func (*permissionService) DeletePermission(ctx context.Context, uuid string) (string, error) {
 	return IPermission.DeletePermission(ctx, uuid)
 }
