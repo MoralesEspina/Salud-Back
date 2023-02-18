@@ -16,4 +16,5 @@ type WorkExp struct {
 	Sector     sqlnulls.NullString `json:"sector,omitempty"`
 	Salary     float64             `json:"salary,omitempty"`
 	WorkExpCol sqlnulls.NullString `json:"workexpcol,omitempty"`
+	Company    sqlnulls.NullString `json:"company,omitempty"`
 }

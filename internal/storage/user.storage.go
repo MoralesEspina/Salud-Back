@@ -103,9 +103,13 @@ func (*repoUser) Update(ctx context.Context, uuid string, user *models.User) (st
 		return "", err
 	}
 
-	query := "UPDATE user SET rol_id=?, username=?, password=? WHERE uuid = ?;"
-
-	_, err = db.QueryContext(ctx, query, user.IDRol, user.Username, string(hashedPassword), uuid)
+	if user.Password == "" {
+		query := "UPDATE user SET rol_id=?, username=? WHERE uuid = ?;"
+		_, err = db.QueryContext(ctx, query, user.IDRol, user.Username, uuid)
+	} else {
+		query := "UPDATE user SET rol_id=?, username=?, password=? WHERE uuid = ?;"
+		_, err = db.QueryContext(ctx, query, user.IDRol, user.Username, string(hashedPassword), uuid)
+	}
 
 	if err != nil {
 		println(user.IDRol, user.Username)

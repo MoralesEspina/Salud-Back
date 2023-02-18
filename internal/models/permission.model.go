@@ -15,5 +15,6 @@ type Permission struct {
 	Reason         string `json:"reason,omitempty"`
 	Status         string `json:"status,omitempty"`
 	Document       string `json:"document,omitempty"`
+	Fullname       string `json:"fullname,omitempty"`
 	Person         `json:"person,omitempty"`
 }

@@ -22,7 +22,7 @@ type WorkExpStorage interface {
 }
 
 func (*repoWorkExp) Create(ctx context.Context, workExp models.WorkExp) (models.WorkExp, error) {
-	query := `INSERT INTO workExp VALUES(?,?,?,?,?,?,?,?,?,?,?,?);`
+	query := `INSERT INTO workExp VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);`
 
 	_, err := db.QueryContext(
 		ctx,
@@ -39,6 +39,7 @@ func (*repoWorkExp) Create(ctx context.Context, workExp models.WorkExp) (models.
 		workExp.Sector,
 		workExp.Salary,
 		workExp.WorkExpCol,
+		workExp.Company,
 	)
 
 	if err != nil {
@@ -70,7 +71,8 @@ func (*repoWorkExp) GetWorks(ctx context.Context, uuid string) ([]models.WorkExp
 			&work.BossName,
 			&work.Sector,
 			&work.Salary,
-			&work.WorkExpCol)
+			&work.WorkExpCol,
+			&work.Company)
 		if err != nil {
 			return works, err
 		}

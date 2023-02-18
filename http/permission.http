@@ -59,10 +59,10 @@ GET {{host}}/permission/271a64c5-7b0a-47f5-9daf-99a937887c4c
 Authorization: Bearer {{login.response.body.token}}
 
 ###
-PUT {{host}}/permission/2ce10033-b4ac-4e37-9a40-a23184f8e8af
+PUT {{host}}/permission/2046b611-3506-49bf-aa88-87f92f5a2783
 Authorization: Bearer {{login.response.body.token}}
 Content-Type: application/json
 
 {
-    "statusBossOne": "Aceptada"
+    "statusBossTwo": "Aceptada"
 }
