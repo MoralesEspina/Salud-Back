@@ -61,7 +61,7 @@ func (*repoPermission) Create(ctx context.Context, request models.Permission) (m
 func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status FROM permission r
+	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
 				INNER JOIN person p ON r.uuidPerson = p.uuid
 				WHERE r.submittedAt >= ? AND r.submittedAt <= ?
 				ORDER BY r.submittedAt DESC`
@@ -72,7 +72,7 @@ func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate st
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Fullname, &permission.Status)
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Fullname, &permission.Status, &permission.UuidPerson)
 		if err != nil {
 			return permissions, err
 		}
