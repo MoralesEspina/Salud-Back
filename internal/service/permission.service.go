@@ -77,14 +77,14 @@ func (r *permissionService) GetPermissions(ctx context.Context, uuidPerson, role
 				INNER JOIN person p ON r.uuidPerson = p.uuid 
 				WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
 				AND r.submittedAt >= ? AND r.submittedAt <= ? 
-				ORDER BY r.submittedAt ASC;`
+				ORDER BY r.submittedAt DESC;`
 			args = append(args, uuidPerson, startDate, endDate)
 		} else {
 			query = `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r 
 				INNER JOIN person p ON r.uuidPerson = p.uuid 
 				WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
 				AND r.submittedAt >= ? AND r.submittedAt <= ? AND r.status = ? 
-				ORDER BY r.submittedAt ASC;`
+				ORDER BY r.submittedAt DESC;`
 			args = append(args, uuidPerson, startDate, endDate, status)
 		}
 	}
