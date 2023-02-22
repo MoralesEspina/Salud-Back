@@ -16,7 +16,7 @@ func NewPermission() IPermissionStorage {
 
 type IPermissionStorage interface {
 	Create(ctx context.Context, Permission models.Permission) (models.Permission, error)
-	GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error)
+	GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error)
@@ -58,15 +58,15 @@ func (*repoPermission) Create(ctx context.Context, request models.Permission) (m
 	return request, nil
 }
 
-func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate string) ([]models.Permission, error) {
+func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
 	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
 				INNER JOIN person p ON r.uuidPerson = p.uuid
-				WHERE r.submittedAt >= ? AND r.submittedAt <= ?
+				WHERE r.submittedAt >= ? AND r.submittedAt <= ? AND r.status = ?
 				ORDER BY r.submittedAt DESC`
 
-	rows, err := db.QueryContext(ctx, query, startDate, endDate)
+	rows, err := db.QueryContext(ctx, query, startDate, endDate, status)
 	if err != nil {
 		return permissions, err
 	}

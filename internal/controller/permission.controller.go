@@ -89,7 +89,8 @@ func (*permissionController) GetPermissions(w http.ResponseWriter, r *http.Reque
 
 	startDate := lib.ValuesURL(r, "startdate")
 	endDate := lib.ValuesURL(r, "enddate")
-	data, err := IPermissionService.GetPermissions(r.Context(), startDate, endDate)
+	status := lib.ValuesURL(r, "status")
+	data, err := IPermissionService.GetPermissions(r.Context(), startDate, endDate, status)
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
