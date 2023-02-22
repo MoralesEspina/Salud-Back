@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ###
-GET {{host}}/permission?startdate=2021/02/05&enddate=2023/02/27
+GET {{host}}/permission?startdate=2021/02/05&enddate=2023/02/27&status=En Espera
 Authorization: Bearer {{login.response.body.token}}
 
 ###
