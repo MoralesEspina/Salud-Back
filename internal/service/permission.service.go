@@ -21,7 +21,8 @@ func NewPermissionService(IPermissionStorage storage.IPermissionStorage) IPermis
 
 type IPermissionService interface {
 	Create(ctx context.Context, request models.Permission, uuidUser string) (models.Permission, error)
-	GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
+	GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
+	GetPermissions(ctx context.Context, uuidUser, role, startDate, endDate, status string) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error)
@@ -53,8 +54,38 @@ func (r *permissionService) Create(ctx context.Context, request models.Permissio
 	return IPermission.Create(ctx, request)
 }
 
-func (r *permissionService) GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
-	return IPermission.GetPermissions(ctx, startDate, endDate, status)
+func (r *permissionService) GetPermissions(ctx context.Context, uuidPerson, role, startDate, endDate, status string) ([]models.Permission, error) {
+	args := []interface{}{}
+	var query string
+
+	if role == "admin" {
+		if status == "Todas" {
+			query = `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
+					INNER JOIN person p ON r.uuidPerson = p.uuid
+					WHERE r.submittedAt >= ? AND r.submittedAt <= ?
+					ORDER BY r.submittedAt DESC`
+			args = append(args, startDate, endDate)
+		} else {
+			query = `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
+				INNER JOIN person p ON r.uuidPerson = p.uuid
+				WHERE r.submittedAt >= ? AND r.submittedAt <= ? AND r.status = ?
+				ORDER BY r.submittedAt DESC`
+			args = append(args, startDate, endDate, status)
+		}
+	} else {
+		query = `SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r 
+		INNER JOIN person p ON r.uuidPerson = p.uuid 
+		WHERE r.bossOne = (Select uuid from user u where u.uuidPerson = ?) 
+		AND r.submittedAt >= ? AND r.submittedAt <= ? AND r.status NOT LIKE 'En Espera' 
+		ORDER BY r.submittedAt ASC;`
+		args = append(args, uuidPerson, startDate, endDate)
+	}
+
+	return IPermission.GetPermissions(ctx, query, args)
+}
+
+func (r *permissionService) GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
+	return IPermission.GetPermissionss(ctx, startDate, endDate, status)
 }
 
 func (r *permissionService) GetOnePermission(ctx context.Context, uuid string) (models.Permission, error) {

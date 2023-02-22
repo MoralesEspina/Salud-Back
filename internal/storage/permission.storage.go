@@ -16,7 +16,8 @@ func NewPermission() IPermissionStorage {
 
 type IPermissionStorage interface {
 	Create(ctx context.Context, Permission models.Permission) (models.Permission, error)
-	GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
+	GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
+	GetPermissions(ctx context.Context, query string, argsQuery []interface{}) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
 	UpdatePermission(ctx context.Context, request models.Permission, uuid, rol string) (string, error)
@@ -58,7 +59,28 @@ func (*repoPermission) Create(ctx context.Context, request models.Permission) (m
 	return request, nil
 }
 
-func (*repoPermission) GetPermissions(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
+func (*repoPermission) GetPermissions(ctx context.Context, query string, argsQuery []interface{}) ([]models.Permission, error) {
+	permission := models.Permission{}
+	permissions := []models.Permission{}
+
+	rows, err := db.QueryContext(ctx, query, argsQuery...)
+	if err != nil {
+		return permissions, err
+	}
+
+	for rows.Next() {
+		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Fullname, &permission.Status, &permission.UuidPerson)
+		if err != nil {
+			return permissions, err
+		}
+
+		permissions = append(permissions, permission)
+	}
+
+	return permissions, nil
+}
+
+func (*repoPermission) GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
 	permission := models.Permission{}
 	permissions := []models.Permission{}
 

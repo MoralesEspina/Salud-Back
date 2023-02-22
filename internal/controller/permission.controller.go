@@ -22,6 +22,7 @@ func NewPermissionController(permissionService service.IPermissionService) IPerm
 
 type IPermissionController interface {
 	Create(w http.ResponseWriter, r *http.Request)
+	GetPermissionss(w http.ResponseWriter, r *http.Request)
 	GetPermissions(w http.ResponseWriter, r *http.Request)
 	GetOnePermission(w http.ResponseWriter, r *http.Request)
 	GetOnePermissionWithName(w http.ResponseWriter, r *http.Request)
@@ -80,7 +81,7 @@ func (*permissionController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (*permissionController) GetPermissions(w http.ResponseWriter, r *http.Request) {
+func (*permissionController) GetPermissionss(w http.ResponseWriter, r *http.Request) {
 	_, ok := middleware.IsAuthenticated(r.Context())
 	if !ok {
 		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
@@ -90,7 +91,43 @@ func (*permissionController) GetPermissions(w http.ResponseWriter, r *http.Reque
 	startDate := lib.ValuesURL(r, "startdate")
 	endDate := lib.ValuesURL(r, "enddate")
 	status := lib.ValuesURL(r, "status")
-	data, err := IPermissionService.GetPermissions(r.Context(), startDate, endDate, status)
+	data, err := IPermissionService.GetPermissionss(r.Context(), startDate, endDate, status)
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*permissionController) GetPermissions(w http.ResponseWriter, r *http.Request) {
+	tokenInfo, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+	uuidPerson := lib.ValuesURL(r, "uuidPerson")
+	startDate := lib.ValuesURL(r, "startdate")
+	endDate := lib.ValuesURL(r, "enddate")
+	status := lib.ValuesURL(r, "status")
+	data, err := IPermissionService.GetPermissions(r.Context(), uuidPerson, tokenInfo.Rol, startDate, endDate, status)
 	if err == lib.ErrNotFound {
 		respond(w, response{
 			Ok:      false,
