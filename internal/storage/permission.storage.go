@@ -16,7 +16,6 @@ func NewPermission() IPermissionStorage {
 
 type IPermissionStorage interface {
 	Create(ctx context.Context, Permission models.Permission) (models.Permission, error)
-	GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error)
 	GetPermissions(ctx context.Context, query string, argsQuery []interface{}) ([]models.Permission, error)
 	GetOnePermission(ctx context.Context, uuid string) (models.Permission, error)
 	GetOnePermissionWithName(ctx context.Context, uuid string) (models.Permission, error)
@@ -77,52 +76,6 @@ func (*repoPermission) GetPermissions(ctx context.Context, query string, argsQue
 		permissions = append(permissions, permission)
 	}
 
-	return permissions, nil
-}
-
-func (*repoPermission) GetPermissionss(ctx context.Context, startDate, endDate, status string) ([]models.Permission, error) {
-	permission := models.Permission{}
-	permissions := []models.Permission{}
-
-	if status == "Todas" {
-		query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
-				INNER JOIN person p ON r.uuidPerson = p.uuid
-				WHERE r.submittedAt >= ? AND r.submittedAt <= ?
-				ORDER BY r.submittedAt DESC`
-
-		rows, err := db.QueryContext(ctx, query, startDate, endDate)
-		if err != nil {
-			return permissions, err
-		}
-
-		for rows.Next() {
-			err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Fullname, &permission.Status, &permission.UuidPerson)
-			if err != nil {
-				return permissions, err
-			}
-
-			permissions = append(permissions, permission)
-		}
-		return permissions, nil
-	}
-	query := `	SELECT r.uuid, r.submittedAt, r.permissionDate, p.fullname, r.status, r.uuidPerson FROM permission r
-				INNER JOIN person p ON r.uuidPerson = p.uuid
-				WHERE r.submittedAt >= ? AND r.submittedAt <= ? AND r.status = ?
-				ORDER BY r.submittedAt DESC`
-
-	rows, err := db.QueryContext(ctx, query, startDate, endDate, status)
-	if err != nil {
-		return permissions, err
-	}
-
-	for rows.Next() {
-		err := rows.Scan(&permission.Uuid, &permission.SubmittedAt, &permission.PermissionDate, &permission.Fullname, &permission.Status, &permission.UuidPerson)
-		if err != nil {
-			return permissions, err
-		}
-
-		permissions = append(permissions, permission)
-	}
 	return permissions, nil
 }
 
