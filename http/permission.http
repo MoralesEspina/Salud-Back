@@ -6,8 +6,8 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"Prueba",
-    "password":"admin"
+    "username":"77913329",
+    "password":"Salud7791-29"
 }
 
 ###
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ###
-GET {{host}}/permission?startdate=2021/02/05&enddate=2023/02/27&status=En Espera
+GET {{host}}/permission?startdate=2021/02/05&enddate=2023/02/27&status=Todas&uuidPerson=c6b295c3-dc12-41f9-b45c-76c609bbd23e
 Authorization: Bearer {{login.response.body.token}}
 
 ###

@@ -20,6 +20,8 @@ type AuthorizationStorage interface {
 	GetManyAuthorizations(ctx context.Context) ([]models.Authorization, error)
 	GetOnlyAuthorization(ctx context.Context, uuid string) (models.Authorization, error)
 	UpdateAuthorization(ctx context.Context, authorization models.Authorization, uuid string) (models.Authorization, error)
+	GetBosses(ctx context.Context) ([]models.Boss, error)
+	UpdateBoss(ctx context.Context, authorization models.Boss, id string) (models.Boss, error)
 
 	// Reportes
 	VacationsReport(ctx context.Context, startDateReport, endDateReport string) ([]models.Authorization, error)
@@ -367,4 +369,51 @@ func (*repoAuthorization) VacationsReport(ctx context.Context, startDateReport, 
 	}
 
 	return authorizations, nil
+}
+
+func (*repoAuthorization) GetBosses(ctx context.Context) ([]models.Boss, error) {
+	boss := models.Boss{}
+	bosses := []models.Boss{}
+
+	query := `SELECT * FROM bossauthorization;`
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return bosses, err
+	}
+
+	for rows.Next() {
+		if err := rows.Scan(&boss.ID, &boss.Name); err != nil {
+			return bosses, err
+		}
+
+		bosses = append(bosses, boss)
+	}
+
+	return bosses, nil
+}
+
+func (*repoAuthorization) UpdateBoss(ctx context.Context, bosses models.Boss, id string) (models.Boss, error) {
+	boss := models.Boss{}
+	trans, err := db.BeginTx(ctx, nil)
+
+	if err != nil {
+		return boss, err
+	}
+	defer trans.Rollback()
+
+	query := `
+	UPDATE bossauthorization 
+	SET name = ?
+    WHERE id = ?`
+
+	_, err = db.QueryContext(ctx, query,
+		bosses.Name,
+		id,
+	)
+	if err != nil {
+		return boss, err
+	}
+
+	return boss, nil
 }

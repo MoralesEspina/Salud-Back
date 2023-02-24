@@ -6,8 +6,8 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "username":"cristianJL",
-    "password":"Guat33mala225"
+    "username":"Prueba",
+    "password":"admin"
 }
 
 ###
@@ -62,3 +62,17 @@ Authorization: Bearer {{login.response.body.token}}
 GET {{host}}/authorizations/pdfauthorization/6cc3686b-e3be-45fb-b99b-1d49aad2bcb6
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
+
+###
+GET {{host}}/authorizations/authbosses
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+###
+PUT {{host}}/authorizations/authbosses/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "name": "Dylan Gay"
+}

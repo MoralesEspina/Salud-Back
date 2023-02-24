@@ -28,6 +28,8 @@ type AuthorizationController interface {
 	GetManyAuthorizations(w http.ResponseWriter, r *http.Request)
 	GetOnlyAuthorization(w http.ResponseWriter, r *http.Request)
 	UpdateAuthorization(w http.ResponseWriter, r *http.Request)
+	GetBosses(w http.ResponseWriter, r *http.Request)
+	UpdateBoss(w http.ResponseWriter, r *http.Request)
 
 	GetOnlyAuthorizationPDF(w http.ResponseWriter, r *http.Request)
 	VacationsReport(w http.ResponseWriter, r *http.Request)
@@ -257,6 +259,83 @@ func (*authorizationController) VacationsReport(w http.ResponseWriter, r *http.R
 			Ok:   true,
 			Data: data,
 		}, http.StatusOK)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*authorizationController) GetBosses(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	data, err := AuthorizationService.GetBosses(r.Context())
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      false,
+			Data:    data,
+			Message: lib.ErrNotFound.Error(),
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err == nil {
+		respond(w, response{
+			Ok:   true,
+			Data: data,
+		}, http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (*authorizationController) UpdateBoss(w http.ResponseWriter, r *http.Request) {
+	_, ok := middleware.IsAuthenticated(r.Context())
+	if !ok {
+		respond(w, response{Message: lib.ErrUnauthenticated.Error()}, http.StatusUnauthorized)
+		return
+	}
+
+	defer r.Body.Close()
+	var boss models.Boss
+
+	if err := json.NewDecoder(r.Body).Decode(&boss); err != nil {
+		respond(w, response{
+			Ok:      false,
+			Message: err.Error(),
+		}, http.StatusBadRequest)
+		return
+	}
+
+	result, err := AuthorizationService.UpdateBoss(r.Context(), boss, mux.Vars(r)["id"])
+	if err == nil {
+		respond(w, response{
+			Ok:      true,
+			Message: "Registro acttualizado satisfactoriamente",
+			Data:    result,
+		}, http.StatusCreated)
+		return
+	}
+
+	if err == lib.ErrNotFound {
+		respond(w, response{
+			Ok:      true,
+			Message: "Registro no encontrado",
+		}, http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		respondError(w, err)
 		return
 	}
 
