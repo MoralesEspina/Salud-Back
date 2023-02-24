@@ -21,7 +21,7 @@ type AuthorizationStorage interface {
 	GetOnlyAuthorization(ctx context.Context, uuid string) (models.Authorization, error)
 	UpdateAuthorization(ctx context.Context, authorization models.Authorization, uuid string) (models.Authorization, error)
 	GetBosses(ctx context.Context) ([]models.Boss, error)
-	UpdateBoss(ctx context.Context, authorization models.Boss, id string) (models.Boss, error)
+	UpdateBoss(ctx context.Context, authorization models.Boss) (models.Boss, error)
 
 	// Reportes
 	VacationsReport(ctx context.Context, startDateReport, endDateReport string) ([]models.Authorization, error)
@@ -383,7 +383,7 @@ func (*repoAuthorization) GetBosses(ctx context.Context) ([]models.Boss, error) 
 	}
 
 	for rows.Next() {
-		if err := rows.Scan(&boss.ID, &boss.Name); err != nil {
+		if err := rows.Scan(&boss.ID, &boss.NameBoss, &boss.NameDirector); err != nil {
 			return bosses, err
 		}
 
@@ -393,7 +393,7 @@ func (*repoAuthorization) GetBosses(ctx context.Context) ([]models.Boss, error) 
 	return bosses, nil
 }
 
-func (*repoAuthorization) UpdateBoss(ctx context.Context, bosses models.Boss, id string) (models.Boss, error) {
+func (*repoAuthorization) UpdateBoss(ctx context.Context, bosses models.Boss) (models.Boss, error) {
 	boss := models.Boss{}
 	trans, err := db.BeginTx(ctx, nil)
 
@@ -404,12 +404,12 @@ func (*repoAuthorization) UpdateBoss(ctx context.Context, bosses models.Boss, id
 
 	query := `
 	UPDATE bossauthorization 
-	SET name = ?
-    WHERE id = ?`
+	SET nameboss = ?, namedirector = ?
+	WHERE id = 1;`
 
 	_, err = db.QueryContext(ctx, query,
-		bosses.Name,
-		id,
+		bosses.NameBoss,
+		bosses.NameDirector,
 	)
 	if err != nil {
 		return boss, err

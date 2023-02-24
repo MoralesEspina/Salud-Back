@@ -316,7 +316,7 @@ func (*authorizationController) UpdateBoss(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	result, err := AuthorizationService.UpdateBoss(r.Context(), boss, mux.Vars(r)["id"])
+	result, err := AuthorizationService.UpdateBoss(r.Context(), boss)
 	if err == nil {
 		respond(w, response{
 			Ok:      true,

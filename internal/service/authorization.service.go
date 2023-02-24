@@ -31,7 +31,7 @@ type AuthorizationService interface {
 	UpdateAuthorization(ctx context.Context, authorization models.Authorization, uuid string) (models.Authorization, error)
 	GetOnlyAuthorizationPDF(ctx context.Context, UUIDAuthorization string) (models.Authorization, error)
 	GetBosses(ctx context.Context) ([]models.Boss, error)
-	UpdateBoss(ctx context.Context, bosses models.Boss, id string) (models.Boss, error)
+	UpdateBoss(ctx context.Context, bosses models.Boss) (models.Boss, error)
 
 	VacationsReport(ctx context.Context, startDateReport, endDateReport string) ([]models.Authorization, error)
 }
@@ -79,6 +79,6 @@ func (*authorizationService) GetBosses(ctx context.Context) ([]models.Boss, erro
 	return AuthorizationStorage.GetBosses(ctx)
 }
 
-func (*authorizationService) UpdateBoss(ctx context.Context, bosses models.Boss, id string) (models.Boss, error) {
-	return AuthorizationStorage.UpdateBoss(ctx, bosses, id)
+func (*authorizationService) UpdateBoss(ctx context.Context, bosses models.Boss) (models.Boss, error) {
+	return AuthorizationStorage.UpdateBoss(ctx, bosses)
 }

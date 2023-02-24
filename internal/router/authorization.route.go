@@ -22,11 +22,11 @@ func SetAuthorizationRoutes(router *mux.Router) *mux.Router {
 	authorization.Use(middleware.AuthForAmdmin)
 	authorization.HandleFunc("", authorizationController.Create).Methods("POST")
 	authorization.HandleFunc("/authbosses", authorizationController.GetBosses).Methods("GET")
+	authorization.HandleFunc("/authbosses", authorizationController.UpdateBoss).Methods("PUT")
 	authorization.HandleFunc("/{uuid}", authorizationController.GetOnlyAuthorization).Methods("GET")
 	authorization.HandleFunc("/{uuid}", authorizationController.UpdateAuthorization).Methods("PUT")
 	authorization.HandleFunc("/pdfauthorization/{uuid}", authorizationController.GetOnlyAuthorizationPDF).Methods("GET")
 	authorization.HandleFunc("", authorizationController.GetManyAuthorizations).Methods("GET")
-	authorization.HandleFunc("/authbosses/{id}", authorizationController.UpdateBoss).Methods("PUT")
 
 	router.HandleFunc("/reports/authorizations", authorizationController.VacationsReport)
 
